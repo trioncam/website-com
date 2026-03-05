@@ -1,2085 +1,1676 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="t.png">
-    <title>TRIONCAM | Citizen Issue Intelligence & Governance Engagement Platform</title>
-    <meta name="description" content="Next-generation civic engagement platform bridging citizens and governance. Report issues, track progress, drive accountability.">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Professional Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        :root {
-            --primary: #06b6d4;
-            --primary-dark: #0891b2;
-            --secondary: #8b5cf6;
-            --accent: #f59e0b;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-tertiary: #f1f5f9;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-tertiary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --card-bg: #ffffff;
-            --glow-primary: rgba(6, 182, 212, 0.3);
-            --glow-secondary: rgba(139, 92, 246, 0.3);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #020617;
-            --bg-secondary: #0f172a;
-            --bg-tertiary: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-tertiary: #94a3b8;
-            --border-color: #334155;
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --card-bg: #1e293b;
-            --glow-primary: rgba(6, 182, 212, 0.5);
-            --glow-secondary: rgba(139, 92, 246, 0.5);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            transition: background-color 0.5s ease, color 0.3s ease;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        /* Animated Background */
-        .animated-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            background: var(--bg-primary);
-            transition: background 0.5s ease;
-        }
-
-        .animated-background::before {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            background: 
-                radial-gradient(circle at 20% 30%, var(--glow-primary) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, var(--glow-secondary) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.15) 0%, transparent 50%);
-            animation: backgroundFloat 20s ease-in-out infinite;
-        }
-
-        [data-theme="dark"] .animated-background::before {
-            opacity: 1;
-        }
-
-        [data-theme="light"] .animated-background::before {
-            opacity: 0.4;
-        }
-
-        @keyframes backgroundFloat {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(-30px, -30px) rotate(120deg); }
-            66% { transform: translate(30px, -50px) rotate(240deg); }
-        }
-
-        /* Grid Pattern */
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(var(--border-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-            background-size: 60px 60px;
-            opacity: 0.3;
-            animation: gridScroll 30s linear infinite;
-        }
-
-        @keyframes gridScroll {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(60px); }
-        }
-
-        /* Floating Orbs */
-        .floating-orbs {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.6;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 300px;
-            height: 300px;
-            background: var(--primary);
-            top: -150px;
-            left: -150px;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 250px;
-            height: 250px;
-            background: var(--secondary);
-            bottom: -125px;
-            right: -125px;
-            animation-delay: 7s;
-        }
-
-        .orb-3 {
-            width: 200px;
-            height: 200px;
-            background: var(--accent);
-            top: 50%;
-            left: 50%;
-            animation-delay: 14s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(100px, -100px) scale(1.1); }
-            66% { transform: translate(-100px, 100px) scale(0.9); }
-        }
-
-        @media (min-width: 768px) {
-            .orb-1 {
-                width: 400px;
-                height: 400px;
-                top: -200px;
-                left: -200px;
-            }
-            
-            .orb-2 {
-                width: 350px;
-                height: 350px;
-                bottom: -175px;
-                right: -175px;
-            }
-            
-            .orb-3 {
-                width: 300px;
-                height: 300px;
-            }
-        }
-
-        /* Enhanced Theme Toggle */
-        .theme-switch {
-            position: relative;
-            width: 56px;
-            height: 28px;
-            background: var(--bg-tertiary);
-            border-radius: 34px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid var(--border-color);
-            box-shadow: inset 0 2px 8px var(--shadow-color);
-        }
-
-        @media (min-width: 768px) {
-            .theme-switch {
-                width: 60px;
-                height: 30px;
-            }
-        }
-
-        .theme-switch:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px var(--glow-primary);
-        }
-
-        .theme-switch-slider {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (min-width: 768px) {
-            .theme-switch-slider {
-                width: 22px;
-                height: 22px;
-            }
-        }
-
-        .theme-switch-slider i {
-            color: white;
-            width: 12px;
-            height: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .theme-switch-slider i {
-                width: 14px;
-                height: 14px;
-            }
-        }
-
-        .theme-switch.active .theme-switch-slider {
-            transform: translateX(28px);
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-        }
-
-        @media (min-width: 768px) {
-            .theme-switch.active .theme-switch-slider {
-                transform: translateX(30px);
-            }
-        }
-
-        /* Logo Theme Switching */
-        [data-theme="dark"] .logo-dark {
-            display: block !important;
-        }
-
-        [data-theme="dark"] .logo-light {
-            display: none !important;
-        }
-
-        [data-theme="light"] .logo-dark {
-            display: none !important;
-        }
-
-        [data-theme="light"] .logo-light {
-            display: block !important;
-        }
-
-        /* Navbar */
-        nav {
-            backdrop-filter: blur(20px);
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px var(--shadow-color);
-        }
-
-        [data-theme="light"] nav {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        [data-theme="dark"] nav {
-            background: rgba(2, 6, 23, 0.95);
-        }
-
-        .nav-link {
-            position: relative;
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Gradient Text */
-        .hero-gradient {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 200% 200%;
-            animation: gradientShift 6s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* Glowing Button */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 0.75rem 1.75rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 8px 20px var(--glow-primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        @media (min-width: 640px) {
-            .btn-primary {
-                padding: 0.875rem 2rem;
-            }
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px var(--glow-primary);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            padding: 0.75rem 1.75rem;
-            border-radius: 12px;
-            font-weight: 600;
-            border: 2px solid var(--primary);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @media (min-width: 640px) {
-            .btn-secondary {
-                padding: 0.875rem 2rem;
-            }
-        }
-
-        .btn-secondary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.4s ease;
-            z-index: -1;
-        }
-
-        .btn-secondary:hover::before {
-            width: 100%;
-        }
-
-        .btn-secondary:hover {
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px var(--glow-primary);
-        }
-
-        /* Enhanced Countdown */
-        .countdown-section {
-            position: relative;
-            padding: 2rem 1rem;
-            overflow: hidden;
-        }
-
-        @media (min-width: 640px) {
-            .countdown-section {
-                padding: 3rem 1rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .countdown-section {
-                padding: 4rem 2rem;
-            }
-        }
-
-        .countdown-container {
-            position: relative;
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 1.5rem 1rem;
-            overflow: hidden;
-            box-shadow: 0 20px 60px var(--shadow-color);
-        }
-
-        @media (min-width: 640px) {
-            .countdown-container {
-                border-radius: 24px;
-                padding: 2rem 1.5rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .countdown-container {
-                padding: 3rem 2rem;
-            }
-        }
-
-        .countdown-bg-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: particleFloat 15s linear infinite;
-        }
-
-        @keyframes particleFloat {
-            0% {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-
-        .countdown-wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0.1;
-            animation: wave 8s ease-in-out infinite;
-            transform-origin: bottom;
-        }
-
-        @keyframes wave {
-            0%, 100% {
-                transform: scaleY(1) translateX(0);
-            }
-            50% {
-                transform: scaleY(1.5) translateX(50px);
-            }
-        }
-
-        .countdown-box {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 14px;
-            padding: 0.875rem 0.5rem;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 20px var(--shadow-color);
-        }
-
-        @media (min-width: 640px) {
-            .countdown-box {
-                border-radius: 16px;
-                padding: 1.25rem 0.75rem;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .countdown-box {
-                padding: 1.5rem 1rem;
-            }
-        }
-
-        .countdown-box::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 14px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-
-        @media (min-width: 640px) {
-            .countdown-box::before {
-                border-radius: 16px;
-            }
-        }
-
-        .countdown-box:hover::before {
-            opacity: 1;
-        }
-
-        .countdown-box:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 20px 40px var(--glow-primary);
-        }
-
-        .countdown-number {
-            font-size: 1.75rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
-            line-height: 1;
-            text-shadow: 0 0 30px var(--glow-primary);
-            position: relative;
-            z-index: 10;
-        }
-
-        @media (min-width: 640px) {
-            .countdown-number {
-                font-size: 2.5rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .countdown-number {
-                font-size: 3rem;
-            }
-        }
-
-        .countdown-number-wrapper {
-            position: relative;
-            height: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (min-width: 640px) {
-            .countdown-number-wrapper {
-                height: 3.5rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .countdown-number-wrapper {
-                height: 4rem;
-            }
-        }
-
-        /* Blob animations for background */
-        @keyframes blob {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(30px, -50px) scale(1.1);
-            }
-            66% {
-                transform: translate(-20px, 20px) scale(0.9);
-            }
-        }
-
-        .animate-blob {
-            animation: blob 7s infinite;
-        }
-
-        .animation-delay-2000 {
-            animation-delay: 2s;
-        }
-
-        .animation-delay-4000 {
-            animation-delay: 4s;
-        }
-
-        .animation-delay-1000 {
-            animation-delay: 1s;
-        }
-
-        /* Slow pulse */
-        @keyframes pulse-slow {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
-        }
-
-        .animate-pulse-slow {
-            animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        /* Slow ping */
-        @keyframes ping-slow {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        .animate-ping-slow {
-            animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-
-        /* Feature Cards with Parallax */
-        .feature-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 1.5rem;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 30px var(--shadow-color);
-        }
-
-        @media (min-width: 768px) {
-            .feature-card {
-                padding: 2rem;
-            }
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--glow-primary), var(--glow-secondary));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .feature-card:hover::before {
-            opacity: 0.1;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 25px 50px var(--glow-primary);
-        }
-
-        .feature-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.25rem;
-            color: white;
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 20px var(--glow-primary);
-        }
-
-        @media (min-width: 768px) {
-            .feature-icon {
-                width: 70px;
-                height: 70px;
-            }
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: rotateY(360deg) scale(1.1);
-            box-shadow: 0 12px 30px var(--glow-primary);
-        }
-
-        /* Stats with Animation */
-        .stat-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border-color);
-            padding: 1rem 0.75rem;
-            border-radius: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px var(--shadow-color);
-            position: relative;
-            overflow: hidden;
-        }
-
-        @media (min-width: 640px) {
-            .stat-card {
-                padding: 1.5rem 1rem;
-                border-radius: 18px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .stat-card {
-                padding: 2rem 1.5rem;
-            }
-        }
-
-        .stat-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .stat-card:hover::after {
-            left: 100%;
-        }
-
-        .stat-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px var(--glow-primary);
-        }
-
-        .stat-number {
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
-            line-height: 1.2;
-        }
-
-        /* Timeline with Animation */
-        .timeline-item {
-            position: relative;
-            padding-left: 2.5rem;
-            padding-bottom: 2rem;
-        }
-
-        @media (min-width: 768px) {
-            .timeline-item {
-                padding-left: 3rem;
-                padding-bottom: 2.5rem;
-            }
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-            border-radius: 4px;
-            animation: timelinePulse 2s ease-in-out infinite;
-        }
-
-        @keyframes timelinePulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: -9px;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
-            border: 3px solid var(--bg-primary);
-            box-shadow: 0 0 0 3px var(--border-color), 0 0 20px var(--glow-primary);
-            animation: dotPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes dotPulse {
-            0%, 100% {
-                box-shadow: 0 0 0 3px var(--border-color), 0 0 20px var(--glow-primary);
-            }
-            50% {
-                box-shadow: 0 0 0 6px var(--border-color), 0 0 30px var(--glow-primary);
-            }
-        }
-
-        /* Image Placeholder with Animation */
-        .image-placeholder {
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 40px var(--shadow-color);
-        }
-
-        @media (min-width: 640px) {
-            .image-placeholder {
-                border-radius: 24px;
-                min-height: 350px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .image-placeholder {
-                min-height: 450px;
-            }
-        }
-
-        .image-placeholder::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 10px,
-                    var(--border-color) 10px,
-                    var(--border-color) 11px
-                );
-            opacity: 0.1;
-            animation: diagonalScroll 20s linear infinite;
-        }
-
-        @keyframes diagonalScroll {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(50px) translateY(50px); }
-        }
-
-        .image-placeholder::after {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, var(--glow-primary) 0%, transparent 70%);
-            animation: glow 4s ease-in-out infinite;
-            opacity: 0.3;
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                transform: translate(-50%, -50%);
-            }
-            50% {
-                transform: translate(-30%, -30%);
-            }
-        }
-
-        /* Scroll Animations */
-        .scroll-fade-in {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .scroll-fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Loading Animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        /* Mobile Menu Overlay */
-        #mobile-menu {
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-
-        #mobile-menu.show {
-            max-height: 500px;
-            opacity: 1;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="t.png">
+<title>TRIONCAM | Citizen Issue Intelligence Platform</title>
+<meta name="description" content="Report civic issues, track resolution in real-time, hold authorities accountable. India's first social civic engagement platform.">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- ══ PROFESSIONAL FONT STACK ══
+  Display/Hero:  Clash Display   — geometric, editorial, commanding
+  Headings:      Plus Jakarta Sans — refined, modern, versatile
+  Body:          Instrument Sans  — warm, highly readable, professional
+  Mono/Labels:   JetBrains Mono  — technical precision for stats & codes
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Plus Jakarta Sans & Instrument Sans from Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Clash Display via CDN (Fontshare) -->
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&display=swap" rel="stylesheet">
+
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ══ CSS VARIABLES ══ */
+:root{
+  --c:#06b6d4;--c2:#8b5cf6;--c3:#f59e0b;--g:#10b981;--r:#ef4444;
+
+  /* FONT VARIABLES */
+  --font-display:'Clash Display',sans-serif;
+  --font-head:'Plus Jakarta Sans',sans-serif;
+  --font-body:'Instrument Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  /* FONT WEIGHTS */
+  --fw-regular:400;
+  --fw-medium:500;
+  --fw-semibold:600;
+  --fw-bold:700;
+  --fw-extrabold:800;
+}
+
+[data-theme="dark"]{--bg:#06060f;--bg2:#0d111e;--bg3:#131929;--t:#f0f4ff;--t2:#8b9bbf;--t3:#505f80;--bd:#1e2840;--sh:rgba(0,0,0,0.6);--card:#0f1526;--gp:rgba(6,182,212,0.45);}
+[data-theme="light"]{--bg:#ffffff;--bg2:#f4f7ff;--bg3:#eaf0fb;--t:#0a0f1e;--t2:#3d4f70;--t3:#7a8aa8;--bd:#dce5f5;--sh:rgba(0,0,0,0.08);--card:#ffffff;--gp:rgba(6,182,212,0.3);}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;}
+
+/* ══ TYPOGRAPHY SYSTEM ══ */
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--t);
+  overflow-x:hidden;
+  transition:background .4s,color .3s;
+  line-height:1.65;
+  font-weight:var(--fw-regular);
+  font-feature-settings:"kern" 1,"liga" 1,"calt" 1;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+
+/* Display headings — Clash Display for maximum impact */
+h1{
+  font-family:var(--font-display);
+  line-height:.92;
+  letter-spacing:-0.02em;
+  font-weight:800;
+}
+
+/* Section headings — Plus Jakarta Sans for refined authority */
+h2,h3,h4,h5{
+  font-family:var(--font-head);
+  line-height:1.15;
+  letter-spacing:-0.015em;
+}
+
+h2{font-weight:var(--fw-extrabold);}
+h3{font-weight:var(--fw-bold);}
+h4{font-weight:var(--fw-bold);}
+
+/* Labels — JetBrains Mono for technical precision */
+.label{
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--c);
+  display:block;
+  margin-bottom:.75rem;
+}
+
+/* Stat numbers — Clash Display for commanding numerics */
+.stat-num{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(1.75rem,4vw,2.5rem);
+  background:linear-gradient(135deg,var(--c),var(--c2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  display:block;
+  line-height:1;
+  margin-bottom:.3rem;
+  letter-spacing:-0.02em;
+}
+
+.stat-lbl{
+  font-family:var(--font-mono);
+  font-size:clamp(.65rem,.85vw,.78rem);
+  color:var(--t3);
+  font-weight:500;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* Pill/badge text — Mono for technical feel */
+.dl-badge,.dl-sl,.dl-sn{font-family:var(--font-mono);}
+.dl-sn{font-weight:700;}
+
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+
+/* BG */
+.anim-bg{position:fixed;inset:0;z-index:-1;background:var(--bg);transition:background .4s;}
+.anim-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(6,182,212,.12) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 85% 75%,rgba(139,92,246,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 50% 50%,rgba(245,158,11,.06) 0%,transparent 70%);animation:bgd 24s ease-in-out infinite;}
+@keyframes bgd{0%,100%{transform:translate(0,0);}33%{transform:translate(-20px,-15px);}66%{transform:translate(15px,-25px);}}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:64px 64px;opacity:.22;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:oa 18s ease-in-out infinite;}
+.o1{width:min(400px,50vw);height:min(400px,50vw);background:var(--c);top:-15%;left:-10%;opacity:.16;}
+.o2{width:min(320px,40vw);height:min(320px,40vw);background:var(--c2);bottom:-10%;right:-8%;opacity:.16;animation-delay:6s;}
+.o3{width:min(250px,30vw);height:min(250px,30vw);background:var(--c3);top:40%;left:40%;opacity:.09;animation-delay:12s;}
+@keyframes oa{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(60px,-80px) scale(1.1);}66%{transform:translate(-60px,60px) scale(.9);}}
+
+/* BANNER */
+.banner{position:relative;z-index:101;background:linear-gradient(135deg,#047857,#0891b2);padding:10px clamp(1rem,4vw,2rem);text-align:center;overflow:hidden;}
+.banner::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 3s linear infinite;}
+@keyframes shimmer{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
+.banner-inner{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;position:relative;z-index:1;}
+.banner-pill{
+  background:rgba(255,255,255,.2);
+  border:1px solid rgba(255,255,255,.35);
+  color:#fff;
+  padding:.25rem .9rem;
+  border-radius:999px;
+  font-family:var(--font-head);
+  font-size:.72rem;
+  font-weight:700;
+  white-space:nowrap;
+  transition:background .2s;
+}
+.banner-pill:hover{background:rgba(255,255,255,.32);}
+.banner-text{
+  color:#fff;
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:clamp(.73rem,.9vw,.84rem);
+}
+
+/* NAV */
+.nav-wrap{position:fixed;width:100%;z-index:100;transition:top .25s;}
+nav{backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);transition:background .3s,box-shadow .3s;}
+[data-theme="dark"] nav{background:rgba(6,6,15,.93);}
+[data-theme="light"] nav{background:rgba(255,255,255,.93);}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem);height:clamp(60px,8vw,72px);display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.nav-logo img{height:clamp(28px,4vw,38px);width:auto;}
+.nav-links{display:flex;align-items:center;gap:clamp(1.25rem,2.5vw,2.5rem);}
+.nav-link{
+  font-family:var(--font-head);
+  font-size:.875rem;
+  font-weight:600;
+  color:var(--t2);
+  position:relative;
+  transition:color .3s;
+  white-space:nowrap;
+  letter-spacing:.01em;
+}
+.nav-link::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;background:linear-gradient(90deg,var(--c),var(--c2));transition:width .3s;border-radius:2px;}
+.nav-link:hover{color:var(--c);}
+.nav-link:hover::after{width:100%;}
+.nav-dl{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:.45rem 1.1rem;
+  border-radius:10px;
+  background:rgba(16,185,129,.1);
+  border:1.5px solid #10b981;
+  color:#10b981;
+  font-family:var(--font-head);
+  font-size:.8rem;
+  font-weight:700;
+  transition:all .3s;
+  white-space:nowrap;
+}
+.nav-dl:hover{background:#10b981;color:#fff;transform:translateY(-2px);}
+.theme-btn{width:44px;height:24px;border-radius:12px;background:var(--bg3);border:1.5px solid var(--bd);position:relative;cursor:pointer;transition:all .3s;flex-shrink:0;}
+.theme-btn:hover{border-color:var(--c);}
+.theme-knob{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--c2));transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:center;}
+.theme-knob svg{width:9px;height:9px;color:#fff;}
+.theme-btn.light .theme-knob{transform:translateX(20px);background:linear-gradient(135deg,#fbbf24,#f59e0b);}
+.hamburger{display:none;background:none;border:none;cursor:pointer;color:var(--t);padding:4px;}
+.mob-menu{display:none;background:var(--bg2);border-top:1px solid var(--bd);padding:1rem clamp(1rem,4vw,2.5rem);flex-direction:column;gap:.5rem;}
+.mob-menu.open{display:flex;}
+.mob-link{
+  padding:.6rem .75rem;
+  border-radius:8px;
+  font-family:var(--font-head);
+  font-weight:600;
+  color:var(--t2);
+  transition:all .2s;
+  display:block;
+  font-size:.9rem;
+}
+.mob-link:hover{background:var(--bg3);color:var(--c);}
+
+/* LOGO VISIBILITY */
+[data-theme="dark"] .logo-dark{display:block;}[data-theme="dark"] .logo-light{display:none;}
+[data-theme="light"] .logo-dark{display:none;}[data-theme="light"] .logo-light{display:block;}
+
+/* UTILITIES */
+.sec{padding:clamp(3.5rem,8vw,6rem) clamp(1rem,5vw,2.5rem);}
+.con{max-width:1280px;margin:0 auto;}
+
+.st{
+  font-family:var(--font-head);
+  font-size:clamp(1.75rem,4vw,3rem);
+  font-weight:800;
+  margin-bottom:1rem;
+  line-height:1.1;
+  letter-spacing:-0.02em;
+}
+
+.ss{
+  font-family:var(--font-body);
+  font-size:clamp(.9rem,1.5vw,1.1rem);
+  color:var(--t2);
+  max-width:56ch;
+  line-height:1.7;
+}
+
+.gtxt{background:linear-gradient(135deg,var(--c),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:gs 6s ease infinite;}
+@keyframes gs{0%,100%{background-position:0%;}50%{background-position:100%;}}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  padding:.75rem 1.75rem;
+  border-radius:12px;
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:.9rem;
+  letter-spacing:.01em;
+  transition:all .3s;
+  cursor:pointer;
+  border:none;
+  position:relative;
+  overflow:hidden;
+}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .5s;}
+.btn:hover::after{transform:translateX(100%);}
+.btn-p{background:linear-gradient(135deg,var(--c),var(--c2));color:#fff;box-shadow:0 8px 24px rgba(6,182,212,.35);}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(6,182,212,.5);}
+.btn-o{background:transparent;color:var(--c);border:2px solid var(--c);}
+.btn-o:hover{background:var(--c);color:#fff;transform:translateY(-3px);}
+.btn-g{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 8px 28px rgba(16,185,129,.4);animation:gp 3s ease-in-out infinite;}
+.btn-g:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 16px 40px rgba(16,185,129,.6);animation:none;}
+@keyframes gp{0%,100%{box-shadow:0 8px 28px rgba(16,185,129,.4);}50%{box-shadow:0 8px 48px rgba(16,185,129,.7),0 0 0 8px rgba(16,185,129,.08);}}
+
+.ldot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;animation:lp 1.5s ease-in-out infinite;}
+@keyframes lp{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.5;}}
+.bg2{background:var(--bg2);}
+
+/* HERO */
+.hero{min-height:100svh;display:flex;align-items:center;padding:clamp(120px,15vw,160px) clamp(1rem,5vw,2.5rem) clamp(3rem,7vw,5rem);}
+.hero-grid{max-width:1280px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr;gap:clamp(2.5rem,5vw,4rem);align-items:center;}
+@media(min-width:1024px){.hero-grid{grid-template-columns:1fr 1fr;}}
+/* On mobile, give the phone column more vertical room */
+@media(max-width:1023px){
+  .hero-phones-col{padding-bottom:clamp(1.5rem,4vw,3rem);}
+}
+.hero-title{
+  font-family:var(--font-display);
+  font-size:clamp(3.5rem,10vw,6.5rem);
+  font-weight:800;
+  line-height:.92;
+  margin-bottom:1.25rem;
+  letter-spacing:-0.03em;
+}
+.hero-sub{
+  font-family:var(--font-body);
+  font-size:clamp(.95rem,1.8vw,1.2rem);
+  color:var(--t2);
+  margin-bottom:2rem;
+  max-width:52ch;
+  line-height:1.75;
+  font-weight:var(--fw-regular);
+}
+.hero-tagline{
+  font-family:var(--font-head);
+  font-size:clamp(1.05rem,2.5vw,1.45rem);
+  font-weight:700;
+  margin-bottom:.7rem;
+  color:var(--t);
+  letter-spacing:-0.01em;
+}
+.hero-btns{display:flex;flex-wrap:wrap;gap:.75rem;}
+.hero-meta{
+  font-family:var(--font-body);
+  font-size:.72rem;
+  color:var(--t3);
+  display:flex;
+  align-items:center;
+  gap:.35rem;
+}
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.35rem 1rem;
+  border-radius:999px;
+  border:1.5px solid var(--bd);
+  background:var(--bg2);
+  font-family:var(--font-mono);
+  font-size:.68rem;
+  font-weight:600;
+  color:var(--t2);
+  margin-bottom:1.25rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* PHONES */
+.phones{display:flex;align-items:flex-end;justify-content:center;gap:0;padding:1rem 0 0;}
+.phone{position:relative;flex-shrink:0;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+.phone:hover{transform:translateY(-14px) scale(1.03)!important;}
+.phone img{width:100%;height:auto;border-radius:clamp(24px,4vw,42px);display:block;}
+
+/* Desktop — all same width, sides slightly shorter via scale */
+.ph-main{width:clamp(180px,22vw,255px);filter:drop-shadow(0 40px 80px rgba(6,182,212,.55));z-index:2;}
+.ph-side{width:clamp(180px,22vw,255px);opacity:.85;}
+.ph-side:first-child{transform:rotate(-7deg) scale(0.96);transform-origin:bottom right;margin-right:-20px;z-index:1;}
+.ph-side:last-child{transform:rotate(7deg) scale(0.96);transform-origin:bottom left;margin-left:-20px;z-index:1;}
+
+/* Tablet 600–1023px */
+@media(max-width:1023px) and (min-width:600px){
+  .ph-main{width:clamp(150px,25vw,200px);}
+  .ph-side{width:clamp(150px,25vw,200px);}
+  .ph-side:first-child{margin-right:-16px;}
+  .ph-side:last-child{margin-left:-16px;}
+}
+
+/* Mobile <600px */
+@media(max-width:599px){
+  .ph-main{width:clamp(125px,36vw,165px);}
+  .ph-side{width:clamp(125px,36vw,165px);}
+  .ph-side:first-child{transform:rotate(-6deg) scale(0.96);transform-origin:bottom right;margin-right:-13px;}
+  .ph-side:last-child{transform:rotate(6deg) scale(0.96);transform-origin:bottom left;margin-left:-13px;}
+}
+
+/* Very small <380px */
+@media(max-width:380px){
+  .ph-main{width:108px;}
+  .ph-side{width:108px;}
+  .ph-side:first-child{margin-right:-10px;}
+  .ph-side:last-child{margin-left:-10px;}
+}
+
+.ph-glow{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);width:80%;height:28px;background:radial-gradient(ellipse,rgba(6,182,212,.6),transparent 70%);filter:blur(8px);}
+.ph-fb{
+  background:linear-gradient(135deg,#131929,#0d111e);
+  border:2px solid var(--bd);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  padding:1.25rem;
+  aspect-ratio:9/19;
+  color:var(--t3);
+  font-family:var(--font-mono);
+  font-size:.62rem;
+  text-align:center;
+}
+.phone-caption{
+  margin-top:.85rem;
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  color:var(--t3);
+}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(.6rem,2vw,1.1rem);}
+@media(min-width:768px){.stats-grid{grid-template-columns:repeat(4,1fr);}}
+.stat-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:clamp(.9rem,3vw,1.6rem);text-align:center;transition:all .35s;box-shadow:0 4px 20px var(--sh);position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,182,212,.05),rgba(139,92,246,.05));opacity:0;transition:opacity .3s;}
+.stat-card:hover{border-color:var(--c);transform:translateY(-6px);box-shadow:0 16px 40px var(--sh);}
+.stat-card:hover::before{opacity:1;}
+
+/* MARQUEE */
+.mq-outer{overflow:hidden;mask-image:linear-gradient(to right,transparent,#000 8%,#000 92%,transparent);}
+.mq-track{display:flex;gap:clamp(.6rem,1.5vw,1.1rem);width:max-content;animation:mqscroll 28s linear infinite;}
+.mq-track:hover{animation-play-state:paused;}
+@keyframes mqscroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.mc{width:clamp(200px,26vw,272px);height:clamp(130px,13vw,168px);flex-shrink:0;border-radius:14px;overflow:hidden;position:relative;box-shadow:0 6px 24px rgba(0,0,0,.35);}
+.mc img{width:100%;height:100%;object-fit:cover;}
+.mc-lbl{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:.45rem .7rem;
+  background:linear-gradient(transparent,rgba(0,0,0,.8));
+  color:#fff;
+  font-family:var(--font-mono);
+  font-size:.65rem;
+  font-weight:600;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:.4rem .9rem;
+  border-radius:999px;
+  font-family:var(--font-head);
+  font-size:.76rem;
+  font-weight:600;
+  background:var(--card);
+  border:1.5px solid var(--bd);
+  color:var(--t2);
+  white-space:nowrap;
+  transition:all .25s;
+  box-shadow:0 2px 8px var(--sh);
+}
+.pill:hover{border-color:var(--c);color:var(--c);transform:translateY(-2px);}
+
+/* PROBLEM/SOLUTION */
+.ps-banner{width:100%;border-radius:20px;overflow:hidden;height:clamp(180px,22vw,300px);position:relative;box-shadow:0 18px 48px var(--sh);}
+.ps-banner img{width:100%;height:100%;object-fit:cover;}
+.ps-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,6,15,.75),rgba(139,92,246,.2));}
+.ps-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.25rem;}
+.ps-eyebrow{
+  color:rgba(255,255,255,.7);
+  font-family:var(--font-mono);
+  font-size:.65rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  margin-bottom:.4rem;
+}
+.ps-headline{
+  color:#fff;
+  font-family:var(--font-head);
+  font-size:clamp(1.35rem,4vw,2.75rem);
+  font-weight:800;
+  letter-spacing:-0.02em;
+}
+.ps-body{
+  color:rgba(255,255,255,.82);
+  font-family:var(--font-body);
+  font-size:clamp(.78rem,1.4vw,.98rem);
+  margin-top:.5rem;
+  max-width:44ch;
+  line-height:1.7;
+}
+
+.check-row{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1.25rem;}
+.ci{width:clamp(36px,5vw,44px);height:clamp(36px,5vw,44px);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.twoC{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,4rem);}
+@media(min-width:1024px){.twoC{grid-template-columns:1fr 1fr;}}
+
+.check-title{
+  font-family:var(--font-head);
+  font-weight:700;
+  margin-bottom:.2rem;
+  font-size:.95rem;
+  letter-spacing:-.01em;
+}
+.check-body{
+  font-family:var(--font-body);
+  font-size:.84rem;
+  color:var(--t2);
+  line-height:1.65;
+}
+
+/* PHOTO GRID */
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.4rem,1.2vw,.85rem);}
+@media(min-width:768px){.pg{grid-template-columns:repeat(3,1fr);}}
+.pg-big{grid-column:1/3;height:clamp(180px,22vw,260px);}
+@media(min-width:768px){.pg-big{grid-column:1/2;grid-row:1/3;height:auto;min-height:320px;}}
+.pgi{border-radius:14px;overflow:hidden;position:relative;}
+.pgi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.pgi:hover img{transform:scale(1.06);}
+.pgi-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,15,.72),transparent 55%);}
+.ptag{
+  position:absolute;
+  bottom:.55rem;
+  left:.55rem;
+  padding:.22rem .65rem;
+  border-radius:999px;
+  font-family:var(--font-mono);
+  font-size:.58rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#fff;
+}
+.pg-caption{
+  font-family:var(--font-head);
+  font-size:clamp(.78rem,1.4vw,.92rem);
+  font-weight:700;
+}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:1fr;gap:clamp(.65rem,2vw,1.1rem);}
+@media(min-width:600px){.feat-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:1024px){.feat-grid{grid-template-columns:repeat(3,1fr);}}
+.fc{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:clamp(1.1rem,2.5vw,1.65rem);transition:all .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;box-shadow:0 4px 18px var(--sh);}
+.fc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,182,212,.07),rgba(139,92,246,.07));opacity:0;transition:opacity .3s;}
+.fc:hover{border-color:var(--c);transform:translateY(-8px);box-shadow:0 22px 45px var(--sh);}
+.fc:hover::before{opacity:1;}
+.fci{width:clamp(46px,6vw,56px);height:clamp(46px,6vw,56px);background:linear-gradient(135deg,var(--c),var(--c2));border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:.9rem;color:#fff;box-shadow:0 6px 16px rgba(6,182,212,.3);transition:transform .4s;flex-shrink:0;}
+.fc:hover .fci{transform:scale(1.1) rotate(5deg);}
+.fc-title{
+  font-family:var(--font-head);
+  font-size:clamp(.95rem,1.4vw,1.05rem);
+  font-weight:800;
+  margin-bottom:.5rem;
+  letter-spacing:-.01em;
+}
+.fc-body{
+  font-family:var(--font-body);
+  font-size:.82rem;
+  color:var(--t2);
+  line-height:1.68;
+}
+
+/* DOWNLOAD */
+.dl-card{background:var(--card);border:1.5px solid var(--bd);border-radius:24px;padding:clamp(1.5rem,4vw,2.5rem);position:relative;overflow:hidden;box-shadow:0 20px 70px var(--sh);}
+.dl-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,182,212,.04),rgba(139,92,246,.04));}
+.dl-inner{position:relative;z-index:1;}
+.dl-grid{display:grid;grid-template-columns:1fr;gap:2rem;}
+@media(min-width:768px){.dl-grid{grid-template-columns:1fr 1fr;align-items:start;}}
+.dl-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin-bottom:1.1rem;}
+.dl-stat{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:.8rem .5rem;text-align:center;transition:all .3s;}
+.dl-stat:hover{border-color:var(--c);transform:translateY(-3px);}
+.dl-sn{font-weight:700;color:var(--c);font-size:.95rem;}
+.dl-sl{font-size:.6rem;color:var(--t3);margin-top:.15rem;text-transform:uppercase;letter-spacing:.06em;}
+.dl-steps{background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:1.1rem;}
+.dl-step{display:flex;align-items:flex-start;gap:.65rem;padding:.55rem 0;border-bottom:1px solid var(--bd);}
+.dl-step:last-child{border-bottom:none;padding-bottom:0;}
+.dsn{width:22px;height:22px;min-width:22px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--c2));display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.65rem;font-weight:700;color:#fff;}
+.dl-step-title{
+  font-family:var(--font-head);
+  font-size:.8rem;
+  font-weight:700;
+  color:var(--t);
+  letter-spacing:-.01em;
+}
+.dl-step-body{
+  font-family:var(--font-body);
+  font-size:.7rem;
+  color:var(--t3);
+  line-height:1.5;
+}
+.dl-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.3rem;
+  padding:.28rem .75rem;
+  border-radius:999px;
+  font-size:.6rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.db-l{background:rgba(16,185,129,.12);border:1px solid #10b981;color:#10b981;}
+.db-v{background:rgba(6,182,212,.12);border:1px solid var(--c);color:var(--c);}
+.db-a{background:rgba(78,205,196,.12);border:1px solid #4ecdc4;color:#4ecdc4;}
+.dl-prog{height:4px;background:var(--bg3);border-radius:999px;overflow:hidden;margin-top:.75rem;display:none;}
+.dl-prog.active{display:block;}
+.dl-bar{height:100%;background:linear-gradient(90deg,#10b981,var(--c));animation:pf 2.2s ease-out forwards;}
+@keyframes pf{from{width:0%;}to{width:100%;}}
+.dl-name{
+  font-family:var(--font-display);
+  font-size:clamp(1.35rem,3vw,2rem);
+  font-weight:700;
+  margin-bottom:.2rem;
+  letter-spacing:-.02em;
+}
+.dl-sub{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  color:var(--t3);
+  margin-bottom:1.35rem;
+  letter-spacing:.04em;
+}
+.dl-steps-label{
+  font-family:var(--font-mono);
+  font-size:.62rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--c);
+  margin-bottom:.75rem;
+}
+
+/* SHOWCASE */
+.sc-row{display:grid;grid-template-columns:1fr;gap:clamp(2rem,5vw,4rem);align-items:center;}
+@media(min-width:1024px){.sc-row{grid-template-columns:1fr 1fr;}}
+.sc-phones{display:flex;align-items:flex-end;justify-content:center;gap:clamp(.4rem,1.5vw,.8rem);}
+.spm{width:clamp(105px,17vw,168px);}
+.sps{width:clamp(80px,13vw,128px);opacity:.8;}
+.sps:first-child{transform:rotate(-5deg) translateY(16px);}
+.sps:last-child{transform:rotate(5deg) translateY(16px);}
+.dash-img{border-radius:18px;overflow:hidden;position:relative;box-shadow:0 22px 56px var(--sh);}
+.dash-img img{width:100%;display:block;}
+.sc-title{
+  font-family:var(--font-head);
+  font-size:clamp(1.75rem,4vw,3rem);
+  font-weight:800;
+  margin-bottom:1rem;
+  line-height:1.1;
+  letter-spacing:-.02em;
+}
+.sc-body{
+  font-family:var(--font-body);
+  font-size:.92rem;
+  color:var(--t2);
+  margin-bottom:1.4rem;
+  line-height:1.75;
+  max-width:46ch;
+}
+.sc-li{
+  display:flex;
+  align-items:flex-start;
+  gap:.6rem;
+  font-family:var(--font-body);
+  font-size:.88rem;
+  line-height:1.6;
+}
+
+/* TIMELINE */
+.tl{display:grid;grid-template-columns:1fr;gap:0;}
+@media(min-width:768px){.tl{grid-template-columns:1fr 1fr;gap:0 2rem;}}
+.tli{position:relative;padding:0 0 2rem 2.25rem;}
+@media(min-width:768px){.tli{padding:0 0 2.5rem 2.75rem;}}
+.tl-line{position:absolute;left:.5rem;top:0;bottom:0;width:2px;background:linear-gradient(var(--c),var(--c2));border-radius:2px;opacity:.45;}
+.tl-dot{position:absolute;left:0;top:.2rem;width:17px;height:17px;background:var(--c);border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 0 3px var(--bd),0 0 14px rgba(6,182,212,.5);}
+.tl-title{
+  font-family:var(--font-head);
+  font-weight:800;
+  font-size:.95rem;
+  margin-bottom:.3rem;
+  letter-spacing:-.01em;
+}
+.tl-body{
+  font-family:var(--font-body);
+  font-size:.8rem;
+  color:var(--t2);
+  line-height:1.65;
+}
+
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:1fr;gap:clamp(.65rem,2vw,1.1rem);}
+@media(min-width:768px){.tg{grid-template-columns:repeat(3,1fr);}}
+.tc{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:clamp(1.1rem,2.5vw,1.65rem);position:relative;overflow:hidden;transition:all .35s;box-shadow:0 4px 18px var(--sh);}
+.tc::before{content:'"';position:absolute;top:-8px;left:10px;font-size:5rem;font-family:Georgia,serif;line-height:1;color:var(--c);opacity:.1;pointer-events:none;}
+.tc:hover{border-color:var(--c);transform:translateY(-6px);box-shadow:0 18px 38px var(--sh);}
+.tav{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--c);flex-shrink:0;}
+.t-name{font-family:var(--font-head);font-weight:700;font-size:.85rem;letter-spacing:-.01em;}
+.t-location{font-family:var(--font-mono);font-size:.68rem;color:var(--t3);}
+.t-body{font-family:var(--font-body);font-size:.83rem;line-height:1.72;color:var(--t2);}
+
+/* CTA */
+.cta{border-radius:24px;background:linear-gradient(135deg,var(--c),var(--c2));padding:clamp(2.5rem,6vw,4.5rem) clamp(1.5rem,5vw,3rem);text-align:center;position:relative;overflow:hidden;box-shadow:0 22px 56px rgba(6,182,212,.35);}
+.cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 0%,rgba(255,255,255,.15),transparent);}
+.cta-title{
+  font-family:var(--font-display);
+  font-size:clamp(1.75rem,5vw,3.5rem);
+  font-weight:800;
+  color:#fff;
+  margin-bottom:.9rem;
+  line-height:1.05;
+  letter-spacing:-.03em;
+}
+.cta-sub{
+  color:rgba(255,255,255,.9);
+  font-family:var(--font-body);
+  font-size:clamp(.88rem,1.5vw,1.1rem);
+  margin-bottom:1.75rem;
+  max-width:44ch;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.7;
+}
+
+/* ABOUT */
+.ab-banner{width:100%;border-radius:20px;overflow:hidden;height:clamp(175px,20vw,270px);position:relative;box-shadow:0 18px 48px var(--sh);}
+.ab-banner img{width:100%;height:100%;object-fit:cover;}
+.ab-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,182,212,.76),rgba(139,92,246,.65));}
+.ab-eyebrow{
+  color:rgba(255,255,255,.75);
+  font-family:var(--font-mono);
+  font-size:.65rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  margin-bottom:.4rem;
+}
+.ab-title{
+  color:#fff;
+  font-family:var(--font-display);
+  font-size:clamp(1.45rem,4vw,3rem);
+  font-weight:700;
+  letter-spacing:-.03em;
+}
+.ab-subtitle{
+  color:rgba(255,255,255,.85);
+  font-family:var(--font-body);
+  font-size:clamp(.78rem,1.4vw,.98rem);
+  margin-top:.45rem;
+  max-width:40ch;
+  line-height:1.65;
+}
+.ab-grid{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:clamp(2rem,4vw,3rem);}
+@media(min-width:768px){.ab-grid{grid-template-columns:repeat(3,1fr);}}
+.ab-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:clamp(1.25rem,3vw,1.85rem);text-align:center;transition:all .35s;box-shadow:0 4px 16px var(--sh);}
+.ab-card:hover{border-color:var(--c);transform:translateY(-6px);}
+.ab-icon{width:clamp(50px,7vw,62px);height:clamp(50px,7vw,62px);background:linear-gradient(135deg,var(--c),var(--c2));border-radius:50%;margin:0 auto .9rem;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 8px 22px rgba(6,182,212,.35);}
+.ab-card-title{font-family:var(--font-head);font-weight:800;font-size:.95rem;margin-bottom:.45rem;letter-spacing:-.01em;}
+.ab-card-body{font-family:var(--font-body);font-size:.82rem;color:var(--t2);line-height:1.65;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--bd);padding:clamp(2.5rem,5vw,4rem) clamp(1rem,5vw,2.5rem) clamp(1.5rem,3vw,2.5rem);}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,3vw,3rem);margin-bottom:clamp(1.5rem,3vw,2.25rem);}
+@media(min-width:768px){.fg{grid-template-columns:2fr 1fr 1fr 1fr;}}
+.fh{font-family:var(--font-head);font-size:.78rem;font-weight:700;margin-bottom:.8rem;color:var(--t);letter-spacing:.01em;}
+.fl{
+  display:block;
+  font-family:var(--font-body);
+  font-size:.78rem;
+  color:var(--t3);
+  margin-bottom:.45rem;
+  transition:color .2s;
+}
+.fl:hover{color:var(--c);}
+.footer-copy{font-family:var(--font-body);font-size:.72rem;color:var(--t3);}
+.footer-copy2{font-family:var(--font-mono);font-size:.65rem;color:var(--t3);opacity:.5;margin-top:.25rem;letter-spacing:.03em;}
+
+/* RESPONSIVE */
+@media(max-width:1023px){.hamburger{display:flex;}.nav-links{display:none;}}
+@media(max-width:479px){.hero-btns{flex-direction:column;}.hero-btns .btn{width:100%;}}
+
+/* INLINE UTILITY TYPOGRAPHY CLASSES */
+.txt-mono{font-family:var(--font-mono);}
+.txt-head{font-family:var(--font-head);}
+.txt-display{font-family:var(--font-display);}
+.txt-body{font-family:var(--font-body);}
+</style>
 </head>
 <body data-theme="dark">
-    <!-- Animated Background -->
-    <div class="animated-background">
-        <div class="grid-overlay"></div>
-        <div class="floating-orbs">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
+
+<div class="anim-bg">
+  <div class="grid-lines"></div>
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+</div>
+
+<!-- LAUNCH BANNER -->
+<div class="banner" id="launchBanner">
+  <div class="banner-inner">
+    <span style="font-size:1.1rem;">🎉</span>
+    <span class="banner-text">TRIONCAM IS LIVE — March 5th, 2026</span>
+    <a href="#download" class="banner-pill">Download Free →</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-wrap" id="navWrap">
+  <nav>
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo">
+        <img src="logo.png"  alt="TRIONCAM" class="logo-dark">
+        <img src="logo2.png" alt="TRIONCAM" class="logo-light">
+      </a>
+      <div class="nav-links">
+        <a href="#home"     class="nav-link">Home</a>
+        <a href="#download" class="nav-dl"><span class="ldot"></span> Download</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#platform" class="nav-link">Platform</a>
+        <a href="#contact"  class="nav-link">About</a>
+        <div class="theme-btn" id="themeBtn" role="button" aria-label="Toggle theme">
+          <div class="theme-knob" id="themeKnob">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </div>
         </div>
+      </div>
+      <button class="hamburger" id="hambBtn" aria-label="Menu">
+        <svg id="hambIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="mob-menu" id="mobMenu">
+      <a href="#home"     class="mob-link" onclick="closeMenu()">Home</a>
+      <a href="#download" class="mob-link" onclick="closeMenu()" style="color:#10b981;font-weight:700;">⬇ Download App — Free</a>
+      <a href="#features" class="mob-link" onclick="closeMenu()">Features</a>
+      <a href="#platform" class="mob-link" onclick="closeMenu()">Platform</a>
+      <a href="#contact"  class="mob-link" onclick="closeMenu()">About</a>
+      <div style="display:flex;align-items:center;gap:.75rem;padding:.6rem .75rem;">
+        <span style="font-family:var(--font-body);font-size:.82rem;color:var(--t3);">Theme</span>
+        <div class="theme-btn" id="themeBtnMob" role="button" aria-label="Toggle theme">
+          <div class="theme-knob" id="themeKnobMob">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="home" class="hero">
+  <div class="hero-grid">
+    <div data-aos="fade-right" data-aos-duration="850">
+      <div class="hero-badge">
+        <span class="ldot"></span>By ALGOORBIT INNOVATIONS
+      </div>
+      <h1 class="hero-title gtxt">TRION<wbr>CAM</h1>
+      <p class="hero-tagline">Citizen Issue Intelligence Platform</p>
+      <p class="hero-sub">Report civic issues instantly, track resolution in real-time, and hold authorities accountable. India's first social civic engagement platform.</p>
+      <div class="hero-btns">
+        <a href="#download" class="btn btn-g">
+          <i data-lucide="download" style="width:17px;height:17px;"></i>Download APK — Free
+        </a>
+        <a href="#features" class="btn btn-o">
+          Explore Features <i data-lucide="arrow-right" style="width:15px;height:15px;"></i>
+        </a>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.6rem;">
+        <span class="hero-meta"><i data-lucide="shield-check" style="width:13px;height:13px;color:var(--g);"></i>Free · No Ads · Safe</span>
+        <span class="hero-meta"><i data-lucide="smartphone" style="width:13px;height:13px;color:var(--g);"></i>Android 6.0+</span>
+        <span class="hero-meta"><i data-lucide="clock" style="width:13px;height:13px;color:var(--g);"></i>v1.0.0 · March 2026</span>
+      </div>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 sm:h-20">
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <img src="logo.png" alt="TRIONCAM Logo" class="h-8 sm:h-10 w-auto logo-dark" style="display: block;">
-                    <img src="logo2.png" alt="TRIONCAM Logo" class="h-8 sm:h-10 w-auto logo-light" style="display: none;">
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="nav-link text-sm font-medium">Home</a>
-                    <a href="#features" class="nav-link text-sm font-medium">Features</a>
-                    <a href="#platform" class="nav-link text-sm font-medium">Platform</a>
-                    <a href="#launch" class="nav-link text-sm font-medium">Launch</a>
-                    <a href="#contact" class="nav-link text-sm font-medium">Contact</a>
-                    <div class="theme-switch" id="themeToggle">
-                        <div class="theme-switch-slider">
-                            <i data-lucide="moon" class="theme-icon"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="md:hidden" id="mobile-menu-btn" style="color: var(--text-primary);">
-                    <i data-lucide="menu" class="w-6 h-6" id="menu-icon"></i>
-                </button>
-            </div>
+    <!-- PHONES -->
+    <div data-aos="fade-left" data-aos-duration="850" data-aos-delay="150" class="hero-phones-col" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="phones">
+        <div class="phone ph-side">
+          <img src="phone1.png" alt="App screen 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="border-radius:clamp(24px,4vw,42px);">
+          <div class="ph-fb" style="display:none;border-radius:clamp(24px,4vw,42px);">
+            <i data-lucide="smartphone" style="width:28px;height:28px;color:var(--c);opacity:.5;"></i><span>phone1.png</span>
+          </div>
+          <div class="ph-glow"></div>
         </div>
-
-        <div class="md:hidden" id="mobile-menu" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color);">
-            <div class="px-4 pt-2 pb-3 space-y-1">
-                <a href="#home" class="mobile-nav-link block px-3 py-2 rounded-md" style="color: var(--text-primary);">Home</a>
-                <a href="#features" class="mobile-nav-link block px-3 py-2 rounded-md" style="color: var(--text-primary);">Features</a>
-                <a href="#platform" class="mobile-nav-link block px-3 py-2 rounded-md" style="color: var(--text-primary);">Platform</a>
-                <a href="#launch" class="mobile-nav-link block px-3 py-2 rounded-md" style="color: var(--text-primary);">Launch</a>
-                <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md" style="color: var(--text-primary);">Contact</a>
-                <div class="px-3 py-2 flex items-center space-x-3">
-                    <span class="text-sm" style="color: var(--text-secondary);">Theme</span>
-                    <div class="theme-switch" id="themeToggleMobile">
-                        <div class="theme-switch-slider">
-                            <i data-lucide="moon" class="theme-icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="phone ph-main">
+          <img src="phone2.png" alt="App screen 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="border-radius:clamp(24px,4vw,42px);">
+          <div class="ph-fb" style="display:none;border-radius:clamp(24px,4vw,42px);border-color:var(--c);">
+            <i data-lucide="smartphone" style="width:34px;height:34px;color:var(--c);opacity:.7;"></i><span style="color:var(--t2);font-weight:600;">phone2.png</span>
+          </div>
+          <div class="ph-glow"></div>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 relative">
-        <div class="max-w-7xl mx-auto w-full">
-            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div data-aos="fade-right" data-aos-duration="1000" class="text-center lg:text-left">
-                    <div class="inline-block mb-3 sm:mb-4 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 backdrop-blur-sm" style="border-color: var(--border-color); background: var(--bg-secondary); box-shadow: 0 4px 12px var(--shadow-color);">
-                        <span class="text-[10px] sm:text-xs font-semibold" style="color: var(--primary);">By ALGOORBIT INNOVATIONS</span>
-                    </div>
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extrabold mb-3 sm:mb-4 hero-gradient leading-tight">
-                        TRIONCAM
-                    </h1>
-                    <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3" style="color: var(--text-primary);">
-                        Citizen Issue Intelligence Platform
-                    </p>
-                    <p class="text-sm sm:text-base lg:text-lg mb-5 sm:mb-6 leading-relaxed max-w-xl mx-auto lg:mx-0" style="color: var(--text-secondary);">
-                        Transform how citizens engage with governance. Report civic issues instantly, track resolution progress in real-time, and hold authorities accountable.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                        <button class="btn-primary text-sm sm:text-base flex items-center justify-center space-x-2 w-full sm:w-auto">
-                            <span>Join the Waitlist</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        </button>
-                        <button class="btn-secondary text-sm sm:text-base flex items-center justify-center space-x-2 w-full sm:w-auto">
-                            <span>Watch Demo</span>
-                            <i data-lucide="play-circle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200" class="relative mt-8 lg:mt-0">
-                    <div class="image-placeholder">
-                        <div class="text-center z-10 relative px-4">
-                            <i data-lucide="smartphone" class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 mx-auto mb-3" style="color: var(--primary); opacity: 0.4;"></i>
-                            <p class="text-sm sm:text-base lg:text-lg font-semibold" style="color: var(--text-primary);">Mobile App Preview</p>
-                            <p class="text-xs sm:text-sm mt-1" style="color: var(--text-secondary);">Coming March 5th, 2026</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="phone ph-side">
+          <img src="phone3.png" alt="App screen 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="border-radius:clamp(24px,4vw,42px);">
+          <div class="ph-fb" style="display:none;border-radius:clamp(24px,4vw,42px);">
+            <i data-lucide="smartphone" style="width:28px;height:28px;color:var(--c);opacity:.5;"></i><span>phone3.png</span>
+          </div>
+          <div class="ph-glow"></div>
         </div>
-    </section>
+      </div>
+      <p class="phone-caption"><span style="color:var(--c);">●</span> Live app screenshots</p>
+    </div>
+  </div>
+</section>
 
-    <!-- Stats Section -->
-    <section class="py-10 sm:py-16 lg:py-20 px-4 relative" style="background: var(--bg-secondary);">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-                <div class="stat-card scroll-fade-in" data-aos="zoom-in" data-aos-delay="0">
-                    <i data-lucide="users" class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-2 sm:mb-3" style="color: var(--primary);"></i>
-                    <div class="stat-number text-2xl sm:text-3xl lg:text-4xl">100K+</div>
-                    <p class="text-[10px] sm:text-xs lg:text-sm font-semibold mt-1 sm:mt-2" style="color: var(--text-secondary);">Expected Users</p>
-                </div>
-                <div class="stat-card scroll-fade-in" data-aos="zoom-in" data-aos-delay="100">
-                    <i data-lucide="map-pin" class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-2 sm:mb-3" style="color: var(--primary);"></i>
-                    <div class="stat-number text-2xl sm:text-3xl lg:text-4xl">50+</div>
-                    <p class="text-[10px] sm:text-xs lg:text-sm font-semibold mt-1 sm:mt-2" style="color: var(--text-secondary);">Cities Covered</p>
-                </div>
-                <div class="stat-card scroll-fade-in" data-aos="zoom-in" data-aos-delay="200">
-                    <i data-lucide="clock" class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-2 sm:mb-3" style="color: var(--primary);"></i>
-                    <div class="stat-number text-2xl sm:text-3xl lg:text-4xl">24/7</div>
-                    <p class="text-[10px] sm:text-xs lg:text-sm font-semibold mt-1 sm:mt-2" style="color: var(--text-secondary);">Live Tracking</p>
-                </div>
-                <div class="stat-card scroll-fade-in" data-aos="zoom-in" data-aos-delay="300">
-                    <i data-lucide="shield-check" class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-2 sm:mb-3" style="color: var(--primary);"></i>
-                    <div class="stat-number text-2xl sm:text-3xl lg:text-4xl">100%</div>
-                    <p class="text-[10px] sm:text-xs lg:text-sm font-semibold mt-1 sm:mt-2" style="color: var(--text-secondary);">Transparency</p>
-                </div>
-            </div>
+<!-- ══ STATS ══ -->
+<section class="sec bg2">
+  <div class="con">
+    <div class="stats-grid">
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="0"><i data-lucide="users" style="width:30px;height:30px;color:var(--c);margin:0 auto .65rem;display:block;"></i><span class="stat-num">100K+</span><span class="stat-lbl">Expected Users</span></div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="70"><i data-lucide="map-pin" style="width:30px;height:30px;color:var(--c);margin:0 auto .65rem;display:block;"></i><span class="stat-num">50+</span><span class="stat-lbl">Cities Covered</span></div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="140"><i data-lucide="clock" style="width:30px;height:30px;color:var(--c);margin:0 auto .65rem;display:block;"></i><span class="stat-num">24/7</span><span class="stat-lbl">Live Tracking</span></div>
+      <div class="stat-card" data-aos="zoom-in" data-aos-delay="210"><i data-lucide="shield-check" style="width:30px;height:30px;color:var(--c);margin:0 auto .65rem;display:block;"></i><span class="stat-num">100%</span><span class="stat-lbl">Transparency</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ══ -->
+<style>
+.city-card{
+  width:clamp(200px,26vw,272px);
+  height:clamp(130px,13vw,168px);
+  flex-shrink:0;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  box-shadow:0 6px 24px rgba(0,0,0,.35);
+  display:flex;
+  align-items:flex-end;
+  padding:.75rem;
+  cursor:default;
+  transition:transform .3s, box-shadow .3s;
+}
+.city-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 14px 36px rgba(0,0,0,.5);}
+.city-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(160deg, var(--c1) 0%, var(--c2) 100%);
+  z-index:0;
+}
+/* Decorative SVG landmark shape inside each card */
+.city-card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:var(--landmark) center/contain no-repeat;
+  opacity:.13;
+  z-index:1;
+}
+.city-card-inner{position:relative;z-index:2;}
+.city-card-name{
+  font-family:var(--font-display);
+  font-size:clamp(.95rem,1.6vw,1.15rem);
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-.01em;
+  line-height:1;
+  text-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.city-card-tag{
+  font-family:var(--font-mono);
+  font-size:.58rem;
+  font-weight:600;
+  color:rgba(255,255,255,.72);
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  margin-top:.2rem;
+  display:block;
+}
+/* Floating dot pattern overlay */
+.city-card-dots{
+  position:absolute;
+  top:0;right:0;
+  width:55%;height:100%;
+  z-index:1;
+  background-image:radial-gradient(circle,rgba(255,255,255,.18) 1.5px,transparent 1.5px);
+  background-size:14px 14px;
+  background-position:4px 4px;
+}
+/* Population/stat chip */
+.city-chip{
+  position:absolute;
+  top:.6rem;right:.65rem;
+  z-index:2;
+  background:rgba(0,0,0,.28);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:999px;
+  padding:.18rem .55rem;
+  font-family:var(--font-mono);
+  font-size:.58rem;
+  font-weight:600;
+  color:rgba(255,255,255,.9);
+  letter-spacing:.04em;
+}
+</style>
+
+<section style="padding:clamp(2rem,5vw,3.5rem) 0;overflow:hidden;">
+  <div class="con" style="margin-bottom:.85rem;text-align:center;" data-aos="fade-up">
+    <span class="label" style="display:block;">Civic Issues Across India</span>
+    <p style="font-family:var(--font-body);font-size:.82rem;color:var(--t3);">Real problems · Real cities · TRIONCAM helps fix them</p>
+  </div>
+
+  <div class="mq-outer">
+    <div class="mq-track">
+
+      <!-- MUMBAI -->
+      <div class="city-card" style="--c1:#0f4c81;--c2:#1a7fbf;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">20.7M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Gateway of India silhouette -->
+          <rect x="40" y="10" width="30" height="5" fill="white"/>
+          <rect x="35" y="15" width="40" height="4" fill="white"/>
+          <path d="M38 19 Q55 5 72 19" stroke="white" stroke-width="3" fill="none"/>
+          <rect x="42" y="19" width="6" height="45" fill="white"/>
+          <rect x="62" y="19" width="6" height="45" fill="white"/>
+          <rect x="48" y="30" width="14" height="8" fill="white"/>
+          <rect x="35" y="64" width="40" height="4" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Mumbai</div>
+          <span class="city-card-tag">Maharashtra · Gateway of India</span>
         </div>
-    </section>
+      </div>
 
-    <!-- Problem & Solution Section -->
-    <section class="py-10 sm:py-16 lg:py-20 px-4 relative">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-start">
-                <div data-aos="fade-right" data-aos-duration="1000">
-                    <div class="mb-4 sm:mb-6">
-                        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">The Challenge</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8">
-                        Current Civic Reporting Systems Are Broken
-                    </h2>
-                    <div class="space-y-4 sm:space-y-6">
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(239, 68, 68, 0.1); border: 2px solid var(--danger);">
-                                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--danger);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Zero Transparency</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Citizens report issues and never know what happened. Complete black box of information.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(239, 68, 68, 0.1); border: 2px solid var(--danger);">
-                                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--danger);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">No Accountability</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Departments ignore citizen complaints with zero consequences or follow-up mechanisms.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(239, 68, 68, 0.1); border: 2px solid var(--danger);">
-                                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--danger);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Fragmented Systems</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Multiple disconnected platforms across departments create confusion and inefficiency.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(239, 68, 68, 0.1); border: 2px solid var(--danger);">
-                                <i data-lucide="x" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--danger);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Poor User Experience</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Complex forms, outdated interfaces, and difficult navigation discourage citizen participation.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
-                    <div class="mb-4 sm:mb-6">
-                        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">Our Solution</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8">
-                        A Social Platform for Civic Engagement
-                    </h2>
-                    <p class="text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed" style="color: var(--text-secondary);">
-                        TRIONCAM reimagines civic reporting as a social experience. Like Instagram for public issues - intuitive, engaging, and transparent.
-                    </p>
-                    <div class="space-y-4 sm:space-y-6">
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(16, 185, 129, 0.1); border: 2px solid var(--success);">
-                                <i data-lucide="check" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--success);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Social Feed Interface</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Infinite scroll of civic issues in your area. Upvote, comment, share - just like social media.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(16, 185, 129, 0.1); border: 2px solid var(--success);">
-                                <i data-lucide="check" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--success);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Real-Time Tracking</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Live updates at every stage. Know exactly who's handling your issue and what's happening.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(16, 185, 129, 0.1); border: 2px solid var(--success);">
-                                <i data-lucide="check" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--success);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Automatic Escalation</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">SLA-based escalation to MLAs/MPs ensures no issue gets ignored beyond acceptable timeframes.</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3 sm:space-x-4 scroll-fade-in">
-                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center" style="background: rgba(16, 185, 129, 0.1); border: 2px solid var(--success);">
-                                <i data-lucide="check" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--success);"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-base sm:text-lg mb-1">Community Driven</h4>
-                                <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Build reputation, earn badges, and contribute to making your community better.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- NEW DELHI -->
+      <div class="city-card" style="--c1:#7b2d8b;--c2:#b85cc2;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">32.9M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- India Gate silhouette -->
+          <rect x="50" y="5" width="10" height="35" fill="white"/>
+          <path d="M44 40 Q55 25 66 40" stroke="white" stroke-width="3" fill="white" opacity=".5"/>
+          <rect x="38" y="40" width="34" height="6" fill="white"/>
+          <rect x="32" y="46" width="46" height="4" fill="white"/>
+          <rect x="28" y="50" width="54" height="3" fill="white"/>
+          <rect x="25" y="53" width="60" height="10" fill="white"/>
+          <rect x="22" y="63" width="66" height="5" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">New Delhi</div>
+          <span class="city-card-tag">Capital · India Gate</span>
         </div>
-    </section>
+      </div>
 
-    <!-- Countdown Section -->
-    <section id="launch" class="countdown-section relative overflow-hidden" style="background: var(--bg-secondary);">
-        <!-- Dynamic Background Elements -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-0 left-0 w-full h-full">
-                <div class="absolute top-1/4 left-1/4 w-72 h-72 md:w-96 md:h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                <div class="absolute top-1/3 right-1/4 w-72 h-72 md:w-96 md:h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-                <div class="absolute bottom-1/4 left-1/3 w-72 h-72 md:w-96 md:h-96 bg-amber-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-            </div>
+      <!-- BENGALURU -->
+      <div class="city-card" style="--c1:#0d6b4f;--c2:#12a374;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">13.6M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Tech skyline silhouette -->
+          <rect x="15" y="45" width="12" height="30" fill="white"/>
+          <rect x="30" y="35" width="10" height="40" fill="white"/>
+          <rect x="43" y="20" width="14" height="55" fill="white"/>
+          <rect x="60" y="30" width="10" height="45" fill="white"/>
+          <rect x="73" y="40" width="8" height="35" fill="white"/>
+          <rect x="84" y="50" width="10" height="25" fill="white"/>
+          <rect x="46" y="14" width="8" height="8" fill="white"/>
+          <rect x="49" y="8" width="2" height="8" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Bengaluru</div>
+          <span class="city-card-tag">Karnataka · Silicon Valley of India</span>
         </div>
+      </div>
 
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="text-center mb-6 sm:mb-8 lg:mb-12" data-aos="fade-up">
-                <!-- Pulsing Badge -->
-                <div class="inline-flex items-center gap-2 mb-3 sm:mb-4 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full border-2 backdrop-blur-sm animate-pulse-slow" style="border-color: var(--primary); background: rgba(6, 182, 212, 0.1); box-shadow: 0 0 30px var(--glow-primary);">
-                    <div class="relative flex h-3 w-3">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
-                    </div>
-                    <span class="text-[10px] sm:text-xs lg:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">COMING SOON</span>
-                </div>
-                
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-black mt-2 sm:mt-3 lg:mt-4 mb-2 sm:mb-3 tracking-tight">
-                    <span class="hero-gradient block">The Wait is Almost Over!</span>
-                </h2>
-                <p class="text-base sm:text-lg lg:text-2xl font-semibold mb-1 sm:mb-2" style="color: var(--text-primary);">
-                    Launching March 5th, 2026
-                </p>
-                <p class="text-sm sm:text-base lg:text-xl max-w-2xl mx-auto" style="color: var(--text-secondary);">
-                    Be part of the civic revolution. Transform governance together.
-                </p>
-            </div>
-            
-            <div class="countdown-container max-w-6xl mx-auto relative" data-aos="zoom-in" data-aos-delay="200">
-                <!-- Enhanced Particles -->
-                <div class="countdown-bg-particles" id="particlesContainer"></div>
-                
-                <!-- Animated Wave Background -->
-                <div class="countdown-wave"></div>
-                
-                <!-- Glowing Rings - Hidden on mobile for performance -->
-                <div class="absolute inset-0 pointer-events-none hidden sm:block">
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] rounded-full border-2 opacity-20 animate-ping-slow" style="border-color: var(--primary);"></div>
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] rounded-full border-2 opacity-30 animate-ping-slow animation-delay-1000" style="border-color: var(--secondary);"></div>
-                </div>
-
-                <!-- Countdown Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 lg:gap-6 relative z-10">
-                    <div class="countdown-box group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative">
-                            <div class="countdown-number-wrapper">
-                                <div class="countdown-number" id="days">00</div>
-                            </div>
-                            <div class="text-[10px] sm:text-xs lg:text-sm font-bold uppercase tracking-wider mt-2 sm:mt-3 flex items-center justify-center gap-1 sm:gap-2" style="color: var(--text-secondary);">
-                                <i data-lucide="calendar" class="w-3 h-3 sm:w-4 sm:h-4"></i>
-                                Days
-                            </div>
-                            <div class="mt-1 sm:mt-2 h-0.5 sm:h-1 w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50 rounded-full"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="countdown-box group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative">
-                            <div class="countdown-number-wrapper">
-                                <div class="countdown-number" id="hours">00</div>
-                            </div>
-                            <div class="text-[10px] sm:text-xs lg:text-sm font-bold uppercase tracking-wider mt-2 sm:mt-3 flex items-center justify-center gap-1 sm:gap-2" style="color: var(--text-secondary);">
-                                <i data-lucide="clock" class="w-3 h-3 sm:w-4 sm:h-4"></i>
-                                Hours
-                            </div>
-                            <div class="mt-1 sm:mt-2 h-0.5 sm:h-1 w-full bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50 rounded-full"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="countdown-box group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-amber-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative">
-                            <div class="countdown-number-wrapper">
-                                <div class="countdown-number" id="minutes">00</div>
-                            </div>
-                            <div class="text-[10px] sm:text-xs lg:text-sm font-bold uppercase tracking-wider mt-2 sm:mt-3 flex items-center justify-center gap-1 sm:gap-2" style="color: var(--text-secondary);">
-                                <i data-lucide="timer" class="w-3 h-3 sm:w-4 sm:h-4"></i>
-                                Minutes
-                            </div>
-                            <div class="mt-1 sm:mt-2 h-0.5 sm:h-1 w-full bg-gradient-to-r from-transparent via-pink-500 to-transparent opacity-50 rounded-full"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="countdown-box group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-cyan-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div class="relative">
-                            <div class="countdown-number-wrapper">
-                                <div class="countdown-number" id="seconds">00</div>
-                            </div>
-                            <div class="text-[10px] sm:text-xs lg:text-sm font-bold uppercase tracking-wider mt-2 sm:mt-3 flex items-center justify-center gap-1 sm:gap-2" style="color: var(--text-secondary);">
-                                <i data-lucide="zap" class="w-3 h-3 sm:w-4 sm:h-4"></i>
-                                Seconds
-                            </div>
-                            <div class="mt-1 sm:mt-2 h-0.5 sm:h-1 w-full bg-gradient-to-r from-transparent via-amber-500 to-transparent opacity-50 rounded-full"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Call to Action Below Countdown -->
-                <div class="mt-6 sm:mt-8 lg:mt-12 text-center" data-aos="fade-up" data-aos-delay="400">
-                    <p class="text-xs sm:text-sm lg:text-base mb-4 sm:mb-6" style="color: var(--text-secondary);">
-                        Join <span class="font-bold" style="color: var(--primary);">10,000+</span> citizens already on the waitlist
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                        <button class="btn-primary text-sm sm:text-base flex items-center justify-center space-x-2 group w-full sm:w-auto">
-                            <i data-lucide="bell" class="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-bounce"></i>
-                            <span>Notify Me at Launch</span>
-                        </button>
-                        <button class="btn-secondary text-sm sm:text-base flex items-center justify-center space-x-2 w-full sm:w-auto">
-                            <i data-lucide="share-2" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                            <span>Share with Friends</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Social Proof Bar -->
-                <div class="mt-6 sm:mt-8 lg:mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6 lg:gap-8 opacity-70">
-                    <div class="flex items-center gap-2">
-                        <div class="flex -space-x-2">
-                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 border-2 border-white dark:border-gray-800"></div>
-                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 border-2 border-white dark:border-gray-800"></div>
-                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-2 border-white dark:border-gray-800"></div>
-                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 border-2 border-white dark:border-gray-800 flex items-center justify-center text-[10px] sm:text-xs font-bold text-white">
-                                +10K
-                            </div>
-                        </div>
-                        <span class="text-[10px] sm:text-xs lg:text-sm font-medium" style="color: var(--text-secondary);">Early adopters</span>
-                    </div>
-                    <div class="flex items-center gap-1 sm:gap-2">
-                        <i data-lucide="star" class="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"></i>
-                        <i data-lucide="star" class="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"></i>
-                        <i data-lucide="star" class="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"></i>
-                        <i data-lucide="star" class="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"></i>
-                        <i data-lucide="star" class="w-3 h-3 sm:w-4 sm:h-4 fill-amber-400 text-amber-400"></i>
-                        <span class="text-[10px] sm:text-xs lg:text-sm font-medium ml-1" style="color: var(--text-secondary);">Highly anticipated</span>
-                    </div>
-                </div>
-            </div>
+      <!-- CHENNAI -->
+      <div class="city-card" style="--c1:#8b3a1a;--c2:#d4622f;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">11.5M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Kapaleeshwarar temple gopuram silhouette -->
+          <rect x="45" y="60" width="20" height="18" fill="white"/>
+          <path d="M43 60 L55 10 L67 60 Z" fill="white"/>
+          <rect x="38" y="55" width="34" height="5" fill="white"/>
+          <rect x="30" y="72" width="50" height="6" fill="white"/>
+          <rect x="25" y="78" width="60" height="5" fill="white"/>
+          <rect x="35" y="48" width="8" height="12" fill="white" opacity=".6"/>
+          <rect x="67" y="48" width="8" height="12" fill="white" opacity=".6"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Chennai</div>
+          <span class="city-card-tag">Tamil Nadu · Marina Beach</span>
         </div>
-    </section>
+      </div>
 
-    <!-- Features Section -->
-    <section id="features" class="py-10 sm:py-16 lg:py-20 px-4 relative">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-10 sm:mb-12 lg:mb-16" data-aos="fade-up">
-                <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">Powerful Features</span>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-3 sm:mb-4 lg:mb-6">
-                    Built for Citizens, Designed for Impact
-                </h2>
-                <p class="text-sm sm:text-base lg:text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
-                    Every feature engineered to strengthen democracy and empower citizens
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
-                    <div class="feature-icon">
-                        <i data-lucide="camera" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">One-Tap Issue Reporting</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Capture photos or videos, add GPS location automatically, describe the issue, and submit in under 30 seconds.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-icon">
-                        <i data-lucide="activity" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Live Issue Tracking</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Watch your issue progress through each stage - from submission to department assignment to resolution.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-icon">
-                        <i data-lucide="trending-up" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Smart Escalation Engine</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Department-specific SLA timers ensure accountability. Unresolved issues automatically escalate to MLAs and MPs.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-icon">
-                        <i data-lucide="layout-grid" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Discover Feed</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Explore civic issues in your neighborhood through an infinite scrolling feed. Filter by category, status, and distance.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-icon">
-                        <i data-lucide="message-circle" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Community Engagement</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Upvote issues to signal importance, comment to add context, share on social media to raise awareness.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="feature-icon">
-                        <i data-lucide="award" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Citizen Reputation System</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Earn verified citizen badges and build contribution scores through quality reporting.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
-                    <div class="feature-icon">
-                        <i data-lucide="shield" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Department Dashboards</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Government departments get streamlined interfaces with role-based access, priority tagging, and SLA monitoring.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="700">
-                    <div class="feature-icon">
-                        <i data-lucide="user-check" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Representative Portals</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        MLAs and MPs access constituency-based filtering, escalation management, and public accountability dashboards.
-                    </p>
-                </div>
-
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="800">
-                    <div class="feature-icon">
-                        <i data-lucide="bar-chart" class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Analytics & Insights</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">
-                        Comprehensive data visualization of issue trends, department performance, resolution times, and community metrics.
-                    </p>
-                </div>
-            </div>
+      <!-- HYDERABAD -->
+      <div class="city-card" style="--c1:#5c2d91;--c2:#8b5cf6;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">10.5M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Charminar silhouette -->
+          <rect x="44" y="55" width="22" height="22" fill="white"/>
+          <rect x="42" y="50" width="26" height="6" fill="white"/>
+          <path d="M55 10 L62 50 L48 50 Z" fill="white"/>
+          <rect x="53" y="8" width="4" height="6" fill="white"/>
+          <rect x="36" y="55" width="8" height="22" fill="white" opacity=".7"/>
+          <rect x="66" y="55" width="8" height="22" fill="white" opacity=".7"/>
+          <rect x="34" y="50" width="8" height="6" fill="white" opacity=".7"/>
+          <rect x="68" y="50" width="8" height="6" fill="white" opacity=".7"/>
+          <path d="M40 30 L44 50 L36 50 Z" fill="white" opacity=".7"/>
+          <path d="M70 30 L74 50 L66 50 Z" fill="white" opacity=".7"/>
+          <rect x="20" y="77" width="70" height="5" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Hyderabad</div>
+          <span class="city-card-tag">Telangana · Charminar</span>
         </div>
-    </section>
+      </div>
 
-    <!-- How It Works -->
-    <section id="platform" class="py-10 sm:py-16 lg:py-20 px-4 relative" style="background: var(--bg-secondary);">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-10 sm:mb-12 lg:mb-16" data-aos="fade-up">
-                <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">Simple Process</span>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-3 sm:mb-4 lg:mb-6">
-                    From Report to Resolution
-                </h2>
-                <p class="text-sm sm:text-base lg:text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
-                    A seamless journey ensuring every civic issue gets the attention it deserves
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
-                <div>
-                    <div class="timeline-item" data-aos="fade-right">
-                        <div class="timeline-dot"></div>
-                        <div class="rounded-2xl p-4 sm:p-5 lg:p-6 border-2" style="background: var(--card-bg); border-color: var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);">
-                            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                                    <i data-lucide="upload" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--primary);"></i>
-                                </div>
-                                <h3 class="text-base sm:text-lg lg:text-xl font-bold">Report Issue</h3>
-                            </div>
-                            <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Citizens report civic problems through mobile app with photos, location, and description. Quick, easy, and intuitive interface.</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="100">
-                        <div class="timeline-dot"></div>
-                        <div class="rounded-2xl p-4 sm:p-5 lg:p-6 border-2" style="background: var(--card-bg); border-color: var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);">
-                            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                                    <i data-lucide="git-branch" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--primary);"></i>
-                                </div>
-                                <h3 class="text-base sm:text-lg lg:text-xl font-bold">Smart Routing</h3>
-                            </div>
-                            <p class="text-sm sm:text-base" style="color: var(--text-secondary);">AI categorizes the issue type and automatically routes it to the appropriate government department for action.</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="200">
-                        <div class="timeline-dot"></div>
-                        <div class="rounded-2xl p-4 sm:p-5 lg:p-6 border-2" style="background: var(--card-bg); border-color: var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);">
-                            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                                    <i data-lucide="eye" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--primary);"></i>
-                                </div>
-                                <h3 class="text-base sm:text-lg lg:text-xl font-bold">Track Progress</h3>
-                            </div>
-                            <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Real-time updates show department assignment, officer responsibility, and action status. Complete transparency at every step.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="300">
-                        <div class="timeline-dot"></div>
-                        <div class="rounded-2xl p-4 sm:p-5 lg:p-6 border-2" style="background: var(--card-bg); border-color: var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);">
-                            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                                    <i data-lucide="alert-triangle" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--primary);"></i>
-                                </div>
-                                <h3 class="text-base sm:text-lg lg:text-xl font-bold">Auto-Escalate</h3>
-                            </div>
-                            <p class="text-sm sm:text-base" style="color: var(--text-secondary);">If departments don't respond within SLA timeframes, issues automatically escalate to elected representatives for intervention.</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="400">
-                        <div class="timeline-dot"></div>
-                        <div class="rounded-2xl p-4 sm:p-5 lg:p-6 border-2" style="background: var(--card-bg); border-color: var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);">
-                            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                                    <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--primary);"></i>
-                                </div>
-                                <h3 class="text-base sm:text-lg lg:text-xl font-bold">Verify Resolution</h3>
-                            </div>
-                            <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Departments upload proof of resolution with before/after photos. Citizens verify and confirm issue closure, ensuring accountability.</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item" data-aos="fade-right" data-aos-delay="500">
-                        <div class="timeline-dot"></div>
-                        <div class="rounded-2xl p-4 sm:p-5 lg:p-6 border-2" style="background: var(--card-bg); border-color: var(--border-color); box-shadow: 0 10px 30px var(--shadow-color);">
-                            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-                                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                                    <i data-lucide="share-2" class="w-5 h-5 sm:w-6 sm:h-6" style="color: var(--primary);"></i>
-                                </div>
-                                <h3 class="text-base sm:text-lg lg:text-xl font-bold">Community Impact</h3>
-                            </div>
-                            <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Resolved issues remain visible as success stories, building trust and encouraging more citizens to participate in civic engagement.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- KOLKATA -->
+      <div class="city-card" style="--c1:#1a4a6e;--c2:#2e86c1;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">15.1M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="120" height="90" viewBox="0 0 120 90" fill="none">
+          <!-- Howrah Bridge silhouette -->
+          <rect x="5" y="75" width="110" height="5" fill="white"/>
+          <line x1="10" y1="75" x2="30" y2="20" stroke="white" stroke-width="3"/>
+          <line x1="110" y1="75" x2="90" y2="20" stroke="white" stroke-width="3"/>
+          <line x1="30" y1="20" x2="90" y2="20" stroke="white" stroke-width="3"/>
+          <line x1="30" y1="20" x2="20" y2="75" stroke="white" stroke-width="1.5"/>
+          <line x1="30" y1="20" x2="35" y2="75" stroke="white" stroke-width="1.5"/>
+          <line x1="30" y1="20" x2="50" y2="75" stroke="white" stroke-width="1.5"/>
+          <line x1="60" y1="20" x2="60" y2="75" stroke="white" stroke-width="1.5"/>
+          <line x1="90" y1="20" x2="70" y2="75" stroke="white" stroke-width="1.5"/>
+          <line x1="90" y1="20" x2="85" y2="75" stroke="white" stroke-width="1.5"/>
+          <line x1="90" y1="20" x2="100" y2="75" stroke="white" stroke-width="1.5"/>
+          <rect x="24" y="15" width="12" height="30" fill="white"/>
+          <rect x="84" y="15" width="12" height="30" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Kolkata</div>
+          <span class="city-card-tag">West Bengal · Howrah Bridge</span>
         </div>
-    </section>
+      </div>
 
-    <!-- Department Coverage -->
-    <section class="py-10 sm:py-16 lg:py-20 px-4 relative">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-10 sm:mb-12 lg:mb-16" data-aos="fade-up">
-                <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">Comprehensive Coverage</span>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-3 sm:mb-4 lg:mb-6">
-                    Every Department, Every Issue
-                </h2>
-                <p class="text-sm sm:text-base lg:text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
-                    Intelligent routing to the right government department based on issue category
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-                <div class="feature-card" data-aos="zoom-in" data-aos-delay="0">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                            <i data-lucide="construction" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--primary);"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm sm:text-base lg:text-lg">Roads & Infrastructure</h4>
-                            <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">Potholes, road damage, construction</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                            <i data-lucide="lightbulb" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--primary);"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm sm:text-base lg:text-lg">Electricity</h4>
-                            <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">Streetlights, power cuts, electrical issues</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                            <i data-lucide="droplet" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--primary);"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm sm:text-base lg:text-lg">Water Supply</h4>
-                            <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">Leakage, supply problems, quality issues</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                            <i data-lucide="trash-2" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--primary);"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm sm:text-base lg:text-lg">Sanitation</h4>
-                            <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">Garbage collection, street cleaning</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                            <i data-lucide="cloud-rain" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--primary);"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm sm:text-base lg:text-lg">Drainage</h4>
-                            <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">Blockages, flooding, sewage overflow</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card" data-aos="zoom-in" data-aos-delay="500">
-                    <div class="flex items-center space-x-3 sm:space-x-4">
-                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(6, 182, 212, 0.1); border: 2px solid var(--primary);">
-                            <i data-lucide="shield-alert" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--primary);"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm sm:text-base lg:text-lg">Public Safety</h4>
-                            <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">Security concerns, law enforcement</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- PUNE -->
+      <div class="city-card" style="--c1:#1a5c3a;--c2:#27ae60;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">7.4M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Shaniwar Wada fort gate silhouette -->
+          <rect x="30" y="30" width="50" height="50" fill="white" opacity=".4"/>
+          <rect x="45" y="40" width="20" height="40" fill="white"/>
+          <path d="M44 40 Q55 28 66 40 Z" fill="white"/>
+          <rect x="25" y="28" width="10" height="50" fill="white"/>
+          <rect x="75" y="28" width="10" height="50" fill="white"/>
+          <rect x="20" y="76" width="70" height="6" fill="white"/>
+          <rect x="48" y="55" width="14" height="25" fill="#1a5c3a"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Pune</div>
+          <span class="city-card-tag">Maharashtra · Oxford of the East</span>
         </div>
-    </section>
+      </div>
 
-    <!-- Platform Preview -->
-    <section class="py-10 sm:py-16 lg:py-20 px-4 relative" style="background: var(--bg-secondary);">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center mb-12 sm:mb-16 lg:mb-20">
-                <div data-aos="fade-right" data-aos-duration="1000">
-                    <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">For Citizens</span>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-4 sm:mb-6">
-                        Social Media Meets Civic Duty
-                    </h2>
-                    <p class="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 leading-relaxed" style="color: var(--text-secondary);">
-                        A familiar, Instagram-like interface makes civic engagement effortless. Swipe through issues, tap to report, follow for updates.
-                    </p>
-                    <ul class="space-y-3 sm:space-y-4">
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">Infinite scroll feed of local issues</span>
-                        </li>
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">One-tap reporting with camera integration</span>
-                        </li>
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">Upvote, comment, and share functionality</span>
-                        </li>
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">Real-time notifications on issue updates</span>
-                        </li>
-                    </ul>
-                </div>
-                <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
-                    <div class="image-placeholder">
-                        <div class="text-center z-10 relative px-4">
-                            <i data-lucide="smartphone" class="w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40 mx-auto mb-4" style="color: var(--primary); opacity: 0.3;"></i>
-                            <p class="font-bold text-sm sm:text-base lg:text-lg" style="color: var(--text-primary);">Citizen Mobile App</p>
-                            <p class="text-xs sm:text-sm mt-2" style="color: var(--text-secondary);">Interface Preview Coming Soon</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
-                <div data-aos="fade-right" data-aos-duration="1000" class="order-2 md:order-1">
-                    <div class="image-placeholder">
-                        <div class="text-center z-10 relative px-4">
-                            <i data-lucide="monitor" class="w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40 mx-auto mb-4" style="color: var(--primary); opacity: 0.3;"></i>
-                            <p class="font-bold text-sm sm:text-base lg:text-lg" style="color: var(--text-primary);">Department Dashboard</p>
-                            <p class="text-xs sm:text-sm mt-2" style="color: var(--text-secondary);">Admin Panel Preview Coming Soon</p>
-                        </div>
-                    </div>
-                </div>
-                <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200" class="order-1 md:order-2">
-                    <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">For Government</span>
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-4 sm:mb-6">
-                        Streamlined Administration
-                    </h2>
-                    <p class="text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 leading-relaxed" style="color: var(--text-secondary);">
-                        Powerful dashboards give departments complete control over issue management. Prioritize, assign, track, and resolve.
-                    </p>
-                    <ul class="space-y-3 sm:space-y-4">
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">Automatic issue assignment based on location and category</span>
-                        </li>
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">SLA monitoring with escalation warnings</span>
-                        </li>
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">Performance analytics and reporting tools</span>
-                        </li>
-                        <li class="flex items-start space-x-2 sm:space-x-3">
-                            <i data-lucide="check-circle" class="w-5 h-5 sm:w-6 sm:h-6 mt-0.5 flex-shrink-0" style="color: var(--success);"></i>
-                            <span class="text-sm sm:text-base">Photo verification for issue resolution</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+      <!-- JAIPUR -->
+      <div class="city-card" style="--c1:#8b1a1a;--c2:#c0392b;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">4.1M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Hawa Mahal silhouette -->
+          <rect x="20" y="60" width="70" height="22" fill="white"/>
+          <path d="M20 60 L25 30 L30 60 Z" fill="white"/>
+          <path d="M30 60 L37 25 L44 60 Z" fill="white"/>
+          <path d="M44 60 L51 20 L58 60 Z" fill="white"/>
+          <path d="M58 60 L65 25 L72 60 Z" fill="white"/>
+          <path d="M72 60 L79 30 L86 60 Z" fill="white" opacity=".7"/>
+          <rect x="51" y="18" width="4" height="5" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Jaipur</div>
+          <span class="city-card-tag">Rajasthan · Pink City</span>
         </div>
-    </section>
+      </div>
 
-    <!-- CTA Section -->
-    <section class="py-10 sm:py-16 lg:py-20 px-4 relative">
-        <div class="max-w-5xl mx-auto">
-            <div class="rounded-3xl p-6 sm:p-8 lg:p-12 text-center relative overflow-hidden" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 25px 60px var(--glow-primary);" data-aos="zoom-in">
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: url('data:image/svg+xml,<svg width=\"60\" height=\"60\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"30\" cy=\"30\" r=\"2\" fill=\"white\"/></svg>'); animation: diagonalScroll 30s linear infinite;"></div>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 text-white relative z-10">
-                    Join the Movement
-                </h2>
-                <p class="text-sm sm:text-base lg:text-xl text-white/95 mb-6 sm:mb-8 max-w-2xl mx-auto relative z-10">
-                    Be among the first to experience the future of civic engagement. Get early access and help shape how citizens connect with governance.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
-                    <button style="background: white; color: #06b6d4; padding: 0.75rem 1.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: all 0.3s ease; border: none; cursor: pointer; width: 100%;" class="sm:w-auto" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 12px 30px rgba(0,0,0,0.4)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.3)';">
-                        Get Early Access
-                    </button>
-                    <button style="background: transparent; border: 2px solid white; color: white; padding: 0.75rem 1.75rem; border-radius: 12px; font-weight: 700; font-size: 0.875rem; transition: all 0.3s ease; cursor: pointer; width: 100%;" class="sm:w-auto" onmouseover="this.style.background='rgba(255,255,255,0.1)';" onmouseout="this.style.background='transparent';">
-                        Partner With Us
-                    </button>
-                </div>
-            </div>
+      <!-- AHMEDABAD -->
+      <div class="city-card" style="--c1:#7b5e00;--c2:#d4a017;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">8.4M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none">
+          <!-- Sabarmati Riverfront + modern skyline -->
+          <rect x="10" y="72" width="90" height="3" fill="white" opacity=".5"/>
+          <rect x="20" y="50" width="10" height="30" fill="white"/>
+          <rect x="35" y="40" width="12" height="40" fill="white"/>
+          <rect x="50" y="30" width="14" height="50" fill="white"/>
+          <rect x="68" y="42" width="10" height="38" fill="white"/>
+          <rect x="82" y="55" width="10" height="25" fill="white"/>
+          <rect x="53" y="24" width="8" height="8" fill="white"/>
+        </svg>
+        <div class="city-card-inner">
+          <div class="city-card-name">Ahmedabad</div>
+          <span class="city-card-tag">Gujarat · Heritage City</span>
         </div>
-    </section>
+      </div>
 
-    <!-- About Company -->
-    <section id="contact" class="py-10 sm:py-16 lg:py-20 px-4 relative" style="background: var(--bg-secondary);">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-8 sm:mb-10 lg:mb-12" data-aos="fade-up">
-                <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: var(--primary);">The Team Behind</span>
-                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-3 sm:mt-4 mb-3 sm:mb-4 lg:mb-6">
-                    ALGOORBIT INNOVATIONS
-                </h2>
-                <p class="text-sm sm:text-base lg:text-xl max-w-3xl mx-auto" style="color: var(--text-secondary);">
-                    A technology company committed to building impactful digital solutions that solve real-world societal challenges.
-                </p>
-            </div>
+      <!-- DUPLICATES for seamless loop -->
+      <div class="city-card" style="--c1:#0f4c81;--c2:#1a7fbf;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">20.7M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="40" y="10" width="30" height="5" fill="white"/><rect x="35" y="15" width="40" height="4" fill="white"/><path d="M38 19 Q55 5 72 19" stroke="white" stroke-width="3" fill="none"/><rect x="42" y="19" width="6" height="45" fill="white"/><rect x="62" y="19" width="6" height="45" fill="white"/><rect x="48" y="30" width="14" height="8" fill="white"/><rect x="35" y="64" width="40" height="4" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Mumbai</div><span class="city-card-tag">Maharashtra · Gateway of India</span></div>
+      </div>
+      <div class="city-card" style="--c1:#7b2d8b;--c2:#b85cc2;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">32.9M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="50" y="5" width="10" height="35" fill="white"/><path d="M44 40 Q55 25 66 40" stroke="white" stroke-width="3" fill="white" opacity=".5"/><rect x="38" y="40" width="34" height="6" fill="white"/><rect x="32" y="46" width="46" height="4" fill="white"/><rect x="25" y="53" width="60" height="10" fill="white"/><rect x="22" y="63" width="66" height="5" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">New Delhi</div><span class="city-card-tag">Capital · India Gate</span></div>
+      </div>
+      <div class="city-card" style="--c1:#0d6b4f;--c2:#12a374;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">13.6M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="15" y="45" width="12" height="30" fill="white"/><rect x="30" y="35" width="10" height="40" fill="white"/><rect x="43" y="20" width="14" height="55" fill="white"/><rect x="60" y="30" width="10" height="45" fill="white"/><rect x="73" y="40" width="8" height="35" fill="white"/><rect x="84" y="50" width="10" height="25" fill="white"/><rect x="46" y="14" width="8" height="8" fill="white"/><rect x="49" y="8" width="2" height="8" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Bengaluru</div><span class="city-card-tag">Karnataka · Silicon Valley of India</span></div>
+      </div>
+      <div class="city-card" style="--c1:#8b3a1a;--c2:#d4622f;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">11.5M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="45" y="60" width="20" height="18" fill="white"/><path d="M43 60 L55 10 L67 60 Z" fill="white"/><rect x="38" y="55" width="34" height="5" fill="white"/><rect x="30" y="72" width="50" height="6" fill="white"/><rect x="25" y="78" width="60" height="5" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Chennai</div><span class="city-card-tag">Tamil Nadu · Marina Beach</span></div>
+      </div>
+      <div class="city-card" style="--c1:#5c2d91;--c2:#8b5cf6;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">10.5M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="44" y="55" width="22" height="22" fill="white"/><rect x="42" y="50" width="26" height="6" fill="white"/><path d="M55 10 L62 50 L48 50 Z" fill="white"/><rect x="53" y="8" width="4" height="6" fill="white"/><rect x="36" y="55" width="8" height="22" fill="white" opacity=".7"/><rect x="66" y="55" width="8" height="22" fill="white" opacity=".7"/><rect x="20" y="77" width="70" height="5" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Hyderabad</div><span class="city-card-tag">Telangana · Charminar</span></div>
+      </div>
+      <div class="city-card" style="--c1:#1a4a6e;--c2:#2e86c1;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">15.1M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="120" height="90" viewBox="0 0 120 90" fill="none"><rect x="5" y="75" width="110" height="5" fill="white"/><line x1="10" y1="75" x2="30" y2="20" stroke="white" stroke-width="3"/><line x1="110" y1="75" x2="90" y2="20" stroke="white" stroke-width="3"/><line x1="30" y1="20" x2="90" y2="20" stroke="white" stroke-width="3"/><line x1="30" y1="20" x2="20" y2="75" stroke="white" stroke-width="1.5"/><line x1="30" y1="20" x2="50" y2="75" stroke="white" stroke-width="1.5"/><line x1="60" y1="20" x2="60" y2="75" stroke="white" stroke-width="1.5"/><line x1="90" y1="20" x2="70" y2="75" stroke="white" stroke-width="1.5"/><line x1="90" y1="20" x2="100" y2="75" stroke="white" stroke-width="1.5"/><rect x="24" y="15" width="12" height="30" fill="white"/><rect x="84" y="15" width="12" height="30" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Kolkata</div><span class="city-card-tag">West Bengal · Howrah Bridge</span></div>
+      </div>
+      <div class="city-card" style="--c1:#1a5c3a;--c2:#27ae60;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">7.4M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="30" y="30" width="50" height="50" fill="white" opacity=".4"/><rect x="45" y="40" width="20" height="40" fill="white"/><path d="M44 40 Q55 28 66 40 Z" fill="white"/><rect x="25" y="28" width="10" height="50" fill="white"/><rect x="75" y="28" width="10" height="50" fill="white"/><rect x="20" y="76" width="70" height="6" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Pune</div><span class="city-card-tag">Maharashtra · Oxford of the East</span></div>
+      </div>
+      <div class="city-card" style="--c1:#8b1a1a;--c2:#c0392b;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">4.1M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="20" y="60" width="70" height="22" fill="white"/><path d="M20 60 L25 30 L30 60 Z" fill="white"/><path d="M30 60 L37 25 L44 60 Z" fill="white"/><path d="M44 60 L51 20 L58 60 Z" fill="white"/><path d="M58 60 L65 25 L72 60 Z" fill="white"/><path d="M72 60 L79 30 L86 60 Z" fill="white" opacity=".7"/><rect x="51" y="18" width="4" height="5" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Jaipur</div><span class="city-card-tag">Rajasthan · Pink City</span></div>
+      </div>
+      <div class="city-card" style="--c1:#7b5e00;--c2:#d4a017;">
+        <div class="city-card-dots"></div>
+        <div class="city-chip">8.4M pop</div>
+        <svg style="position:absolute;bottom:0;right:10px;opacity:.18;z-index:1;" width="110" height="90" viewBox="0 0 110 90" fill="none"><rect x="20" y="50" width="10" height="30" fill="white"/><rect x="35" y="40" width="12" height="40" fill="white"/><rect x="50" y="30" width="14" height="50" fill="white"/><rect x="68" y="42" width="10" height="38" fill="white"/><rect x="82" y="55" width="10" height="25" fill="white"/></svg>
+        <div class="city-card-inner"><div class="city-card-name">Ahmedabad</div><span class="city-card-tag">Gujarat · Heritage City</span></div>
+      </div>
 
-            <div class="grid md:grid-cols-3 gap-6 sm:gap-8 mt-10 sm:mt-12 lg:mt-16">
-                <div class="text-center" data-aos="fade-up" data-aos-delay="0">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 10px 30px var(--glow-primary);">
-                        <i data-lucide="zap" class="w-8 h-8 sm:w-10 sm:h-10 text-white"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Innovation-Driven</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Leveraging cutting-edge technology to create meaningful civic solutions</p>
-                </div>
-                <div class="text-center" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 10px 30px var(--glow-primary);">
-                        <i data-lucide="target" class="w-8 h-8 sm:w-10 sm:h-10 text-white"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Purpose-Built</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Every product designed with clear social impact in mind</p>
-                </div>
-                <div class="text-center" data-aos="fade-up" data-aos-delay="200">
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 10px 30px var(--glow-primary);">
-                        <i data-lucide="rocket" class="w-8 h-8 sm:w-10 sm:h-10 text-white"></i>
-                    </div>
-                    <h3 class="text-base sm:text-lg lg:text-xl font-bold mb-2 sm:mb-3">Scale-Ready</h3>
-                    <p class="text-sm sm:text-base" style="color: var(--text-secondary);">Enterprise-grade infrastructure built for nationwide deployment</p>
-                </div>
-            </div>
+    </div>
+  </div>
 
-            <div class="text-center mt-8 sm:mt-10 lg:mt-12" data-aos="fade-up">
-                <a href="https://www.algoorbit.in" target="_blank" class="inline-flex items-center space-x-2 text-sm sm:text-base lg:text-lg font-semibold hover:underline transition-all" style="color: var(--primary);">
-                    <span>Visit www.algoorbit.in</span>
-                    <i data-lucide="external-link" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                </a>
+  <div class="mq-outer" style="margin-top:.85rem;">
+    <div class="mq-track" style="animation-direction:reverse;animation-duration:22s;">
+      <span class="pill">🚧 Potholes</span><span class="pill">💡 Street Lights</span><span class="pill">🚰 Water Leaks</span><span class="pill">🗑️ Garbage Dumps</span><span class="pill">🌊 Waterlogging</span><span class="pill">⚡ Power Cuts</span><span class="pill">🌳 Fallen Trees</span><span class="pill">🐕 Stray Animals</span><span class="pill">🛤️ Broken Footpath</span><span class="pill">🚦 Signal Issues</span><span class="pill">🏗️ Illegal Construction</span><span class="pill">📡 Poor Connectivity</span>
+      <span class="pill">🚧 Potholes</span><span class="pill">💡 Street Lights</span><span class="pill">🚰 Water Leaks</span><span class="pill">🗑️ Garbage Dumps</span><span class="pill">🌊 Waterlogging</span><span class="pill">⚡ Power Cuts</span><span class="pill">🌳 Fallen Trees</span><span class="pill">🐕 Stray Animals</span><span class="pill">🛤️ Broken Footpath</span><span class="pill">🚦 Signal Issues</span><span class="pill">🏗️ Illegal Construction</span><span class="pill">📡 Poor Connectivity</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DOWNLOAD ══ -->
+<section id="download" class="sec">
+  <div class="con">
+    <div style="text-align:center;margin-bottom:clamp(1.75rem,4vw,2.75rem);" data-aos="fade-up">
+      <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.32rem .9rem;border-radius:999px;background:rgba(16,185,129,.1);border:1.5px solid #10b981;margin-bottom:.9rem;">
+        <span class="ldot"></span>
+        <span style="font-family:var(--font-mono);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#10b981;">App Live — Download Now</span>
+      </div>
+      <h2 class="st"><span class="gtxt">Get TRIONCAM</span></h2>
+      <p class="ss" style="margin:0 auto;">Free Android APK — no app store needed. Download directly.</p>
+    </div>
+    <div class="dl-card" data-aos="zoom-in" data-aos-delay="100">
+      <div class="dl-inner">
+        <div class="dl-grid">
+          <div style="text-align:center;">
+            <div style="width:clamp(60px,9vw,78px);height:clamp(60px,9vw,78px);border-radius:20px;background:linear-gradient(135deg,var(--c),var(--c2));display:flex;align-items:center;justify-content:center;margin:0 auto 1.1rem;box-shadow:0 10px 28px rgba(6,182,212,.35);">
+              <i data-lucide="smartphone" style="width:34px;height:34px;color:#fff;"></i>
             </div>
+            <div style="display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin-bottom:.9rem;">
+              <span class="dl-badge db-l"><span class="ldot"></span>Live Today</span>
+              <span class="dl-badge db-v">v1.0.0</span>
+              <span class="dl-badge db-a">Android APK</span>
+            </div>
+            <h3 class="dl-name">TRIONCAM</h3>
+            <p class="dl-sub">Citizen Intelligence · Free · Android 6.0+</p>
+            <a href="trioncam.apk" download="TRIONCAM_v1.0.0.apk" class="btn btn-g" id="dlBtn" onclick="handleDl(this)" style="width:100%;max-width:290px;font-size:clamp(.82rem,1.4vw,.95rem);">
+              <i data-lucide="download-cloud" style="width:19px;height:19px;"></i>
+              <div style="text-align:left;"><div style="font-weight:800;line-height:1.2;">Download APK</div><div style="font-family:var(--font-mono);font-size:.58rem;opacity:.85;font-weight:400;">Free · ~25 MB · Android</div></div>
+            </a>
+            <div class="dl-prog" id="dlProgress"><div class="dl-bar"></div></div>
+            <p style="font-family:var(--font-body);font-size:.7rem;color:var(--t3);margin-top:.65rem;display:flex;align-items:center;justify-content:center;gap:.3rem;"><i data-lucide="shield-check" style="width:11px;height:11px;color:#10b981;"></i>Safe &amp; verified · No ads · Free forever</p>
+          </div>
+          <div>
+            <div class="dl-stats">
+              <div class="dl-stat"><div class="dl-sn">Free</div><div class="dl-sl">Always</div></div>
+              <div class="dl-stat"><div class="dl-sn">~25MB</div><div class="dl-sl">APK size</div></div>
+              <div class="dl-stat"><div class="dl-sn">v1.0</div><div class="dl-sl">Launch</div></div>
+            </div>
+            <div class="dl-steps">
+              <p class="dl-steps-label">How to Install</p>
+              <div class="dl-step"><div class="dsn">1</div><div><p class="dl-step-title">Tap Download APK</p><p class="dl-step-body">Saves to Downloads folder</p></div></div>
+              <div class="dl-step"><div class="dsn">2</div><div><p class="dl-step-title">Allow Unknown Sources</p><p class="dl-step-body">Settings → Security → Install unknown apps</p></div></div>
+              <div class="dl-step"><div class="dsn">3</div><div><p class="dl-step-title">Open the APK file</p><p class="dl-step-body">Tap to begin installation</p></div></div>
+              <div class="dl-step"><div class="dsn">4</div><div><p class="dl-step-title">Sign up &amp; start reporting</p><p class="dl-step-body">Create account in seconds</p></div></div>
+            </div>
+          </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="py-8 sm:py-10 lg:py-12 px-4 relative" style="border-top: 2px solid var(--border-color);">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
-                <div class="col-span-2 md:col-span-1">
-                    <div class="flex items-center space-x-2 mb-3 sm:mb-4">
-                        <img src="logo.png" alt="TRIONCAM Logo" class="h-8 w-auto logo-dark">
-                        <img src="logo2.png" alt="TRIONCAM Logo" class="h-8 w-auto logo-light">
-                    </div>
-                    <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">
-                        Bridging citizens and governance through technology and transparency.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3 sm:mb-4 text-sm sm:text-base">Platform</h4>
-                    <ul class="space-y-1 sm:space-y-2 text-xs sm:text-sm" style="color: var(--text-secondary);">
-                        <li><a href="#features" class="hover:text-cyan-500 transition-colors">Features</a></li>
-                        <li><a href="#platform" class="hover:text-cyan-500 transition-colors">How It Works</a></li>
-                        <li><a href="#launch" class="hover:text-cyan-500 transition-colors">Launch Date</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3 sm:mb-4 text-sm sm:text-base">Company</h4>
-                    <ul class="space-y-1 sm:space-y-2 text-xs sm:text-sm" style="color: var(--text-secondary);">
-                        <li><a href="https://www.algoorbit.in" target="_blank" class="hover:text-cyan-500 transition-colors">About ALGOORBIT</a></li>
-                        <li><a href="#contact" class="hover:text-cyan-500 transition-colors">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3 sm:mb-4 text-sm sm:text-base">Legal</h4>
-                    <ul class="space-y-1 sm:space-y-2 text-xs sm:text-sm" style="color: var(--text-secondary);">
-                        <li><a href="#" class="hover:text-cyan-500 transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-cyan-500 transition-colors">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t pt-6 sm:pt-8 text-center" style="border-color: var(--border-color);">
-                <p class="text-xs sm:text-sm" style="color: var(--text-secondary);">
-                    © 2026 ALGOORBIT INNOVATIONS PRIVATE LIMITED. All rights reserved.
-                </p>
-                <p class="text-xs mt-2" style="color: var(--text-secondary); opacity: 0.7;">
-                    Building technology for better governance
-                </p>
-            </div>
+        <div style="margin-top:1.4rem;padding-top:1.1rem;border-top:1px solid var(--bd);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.65rem;">
+          <div style="display:flex;flex-wrap:wrap;gap:clamp(.5rem,2vw,1.1rem);">
+            <span style="font-family:var(--font-mono);font-size:.68rem;color:var(--t3);display:flex;align-items:center;gap:.3rem;"><i data-lucide="smartphone" style="width:10px;height:10px;"></i>Android 6.0+</span>
+            <span style="font-family:var(--font-mono);font-size:.68rem;color:var(--t3);display:flex;align-items:center;gap:.3rem;"><i data-lucide="cpu" style="width:10px;height:10px;"></i>2GB RAM</span>
+            <span style="font-family:var(--font-mono);font-size:.68rem;color:var(--t3);display:flex;align-items:center;gap:.3rem;"><i data-lucide="wifi" style="width:10px;height:10px;"></i>Internet</span>
+            <span style="font-family:var(--font-mono);font-size:.68rem;color:var(--t3);display:flex;align-items:center;gap:.3rem;"><i data-lucide="map-pin" style="width:10px;height:10px;"></i>Location</span>
+          </div>
+          <span style="font-family:var(--font-mono);font-size:.68rem;font-weight:600;color:var(--c);letter-spacing:.04em;">Released: March 5, 2026</span>
         </div>
-    </footer>
+      </div>
+    </div>
+    <p style="text-align:center;font-family:var(--font-body);font-size:.76rem;color:var(--t3);margin-top:.9rem;" data-aos="fade-up" data-aos-delay="200">
+      <i data-lucide="apple" style="width:12px;height:12px;display:inline;vertical-align:middle;margin-right:4px;"></i>iOS coming soon · <a href="#contact" style="color:var(--c);text-decoration:underline;font-weight:500;">Join waitlist</a>
+    </p>
+  </div>
+</section>
 
-    <!-- AOS Animation Library -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+<!-- ══ PROBLEM/SOLUTION ══ -->
+<section class="sec bg2">
+  <div class="con">
+    <div class="ps-banner" style="margin-bottom:clamp(1.75rem,4vw,2.75rem);" data-aos="fade-up">
+      <img src="https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=1400&q=72&auto=format&fit=crop" alt="City" loading="lazy">
+      <div class="ps-ov"></div>
+      <div class="ps-txt">
+        <p class="ps-eyebrow">The Reality on Our Streets</p>
+        <h2 class="ps-headline">Millions of Issues. Zero Accountability.</h2>
+        <p class="ps-body">Every city in India faces civic problems that go unresolved for months. TRIONCAM changes that.</p>
+      </div>
+    </div>
+    <div class="twoC">
+      <div data-aos="fade-right">
+        <span class="label">The Challenge</span>
+        <h2 class="st">Current Civic Systems Are Broken</h2>
+        <div style="display:flex;flex-direction:column;gap:1.1rem;">
+          <div class="check-row"><div class="ci" style="background:rgba(239,68,68,.1);border:2px solid var(--r);"><i data-lucide="x" style="width:16px;height:16px;color:var(--r);"></i></div><div><h4 class="check-title">Zero Transparency</h4><p class="check-body">Citizens report issues and never know what happened. A complete black box.</p></div></div>
+          <div class="check-row"><div class="ci" style="background:rgba(239,68,68,.1);border:2px solid var(--r);"><i data-lucide="x" style="width:16px;height:16px;color:var(--r);"></i></div><div><h4 class="check-title">No Accountability</h4><p class="check-body">Departments ignore complaints with zero consequences or follow-up.</p></div></div>
+          <div class="check-row"><div class="ci" style="background:rgba(239,68,68,.1);border:2px solid var(--r);"><i data-lucide="x" style="width:16px;height:16px;color:var(--r);"></i></div><div><h4 class="check-title">Fragmented Systems</h4><p class="check-body">Multiple disconnected platforms create confusion and inefficiency.</p></div></div>
+        </div>
+      </div>
+      <div data-aos="fade-left" data-aos-delay="130">
+        <span class="label">Our Solution</span>
+        <h2 class="st">Social Civic Engagement Platform</h2>
+        <p style="font-family:var(--font-body);font-size:.9rem;color:var(--t2);margin-bottom:1.35rem;line-height:1.75;">TRIONCAM reimagines civic reporting — like Instagram for public issues: intuitive, engaging, and transparent.</p>
+        <div style="display:flex;flex-direction:column;gap:1.1rem;">
+          <div class="check-row"><div class="ci" style="background:rgba(16,185,129,.1);border:2px solid var(--g);"><i data-lucide="check" style="width:16px;height:16px;color:var(--g);"></i></div><div><h4 class="check-title">Social Feed Interface</h4><p class="check-body">Infinite scroll of civic issues. Upvote, comment, share — just like social media.</p></div></div>
+          <div class="check-row"><div class="ci" style="background:rgba(16,185,129,.1);border:2px solid var(--g);"><i data-lucide="check" style="width:16px;height:16px;color:var(--g);"></i></div><div><h4 class="check-title">Real-Time Tracking</h4><p class="check-body">Live updates at every stage. Know exactly who's handling your issue.</p></div></div>
+          <div class="check-row"><div class="ci" style="background:rgba(16,185,129,.1);border:2px solid var(--g);"><i data-lucide="check" style="width:16px;height:16px;color:var(--g);"></i></div><div><h4 class="check-title">Automatic Escalation</h4><p class="check-body">SLA-based escalation to MLAs/MPs ensures no issue gets ignored.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: false,
-            offset: 100,
-            easing: 'ease-out-cubic'
-        });
+<!-- ══ PHOTO GRID ══ -->
+<section class="sec">
+  <div class="con">
+    <div style="text-align:center;margin-bottom:clamp(1.75rem,4vw,2.75rem);" data-aos="fade-up">
+      <span class="label" style="display:block;">Community in Action</span>
+      <h2 class="st">Citizens Making a Difference</h2>
+      <p class="ss" style="margin:0 auto;">Everyday people, extraordinary impact. Join the movement.</p>
+    </div>
+    <div class="pg" data-aos="fade-up" data-aos-delay="100">
+      <div class="pgi pg-big" style="box-shadow:0 14px 44px var(--sh);">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=700&q=72&auto=format&fit=crop" alt="Community" loading="lazy" style="height:100%;">
+        <div class="pgi-ov"></div>
+        <div class="ptag" style="background:rgba(6,182,212,.9);">Community</div>
+        <div style="position:absolute;bottom:.65rem;left:.65rem;right:.65rem;color:#fff;" class="pg-caption">Citizens working together for better neighbourhoods</div>
+      </div>
+      <div class="pgi" style="box-shadow:0 14px 44px var(--sh);aspect-ratio:4/3;">
+        <img src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=500&q=72&auto=format&fit=crop" alt="Mobile" loading="lazy" style="height:100%;">
+        <div class="pgi-ov"></div><div class="ptag" style="background:rgba(139,92,246,.9);">Mobile First</div>
+      </div>
+      <div class="pgi" style="box-shadow:0 14px 44px var(--sh);aspect-ratio:4/3;">
+        <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=500&q=72&auto=format&fit=crop" alt="Tech" loading="lazy" style="height:100%;">
+        <div class="pgi-ov"></div><div class="ptag" style="background:rgba(245,158,11,.9);">Tech + Gov</div>
+      </div>
+      <div class="pgi" style="box-shadow:0 14px 44px var(--sh);aspect-ratio:4/3;">
+        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=500&q=72&auto=format&fit=crop" alt="Analytics" loading="lazy" style="height:100%;">
+        <div class="pgi-ov"></div><div class="ptag" style="background:rgba(16,185,129,.9);">Analytics</div>
+      </div>
+      <div class="pgi" style="box-shadow:0 14px 44px var(--sh);aspect-ratio:4/3;">
+        <img src="https://images.unsplash.com/photo-1607435097405-db48f377bff6?w=500&q=72&auto=format&fit=crop" alt="Clean" loading="lazy" style="height:100%;">
+        <div class="pgi-ov"></div><div class="ptag" style="background:rgba(239,68,68,.9);">Clean Cities</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Theme Toggle Functionality
-        const themeToggle = document.getElementById('themeToggle');
-        const themeToggleMobile = document.getElementById('themeToggleMobile');
-        const html = document.documentElement;
+<!-- ══ FEATURES ══ -->
+<section id="features" class="sec bg2">
+  <div class="con">
+    <div style="text-align:center;margin-bottom:clamp(2rem,4vw,3rem);" data-aos="fade-up">
+      <span class="label" style="display:block;">Powerful Features</span>
+      <h2 class="st">Built for Citizens, Designed for Impact</h2>
+      <p class="ss" style="margin:0 auto;">Every feature engineered to strengthen democracy and empower citizens</p>
+    </div>
+    <div class="feat-grid">
+      <div class="fc" data-aos="fade-up" data-aos-delay="0"><div class="fci"><i data-lucide="camera" style="width:24px;height:24px;"></i></div><h3 class="fc-title">One-Tap Reporting</h3><p class="fc-body">Capture photos/videos, auto GPS, describe and submit in under 30 seconds.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="55"><div class="fci"><i data-lucide="activity" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Live Issue Tracking</h3><p class="fc-body">Watch progress from submission to department to resolution in real-time.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="110"><div class="fci"><i data-lucide="trending-up" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Smart Escalation</h3><p class="fc-body">SLA timers ensure accountability. Unresolved issues auto-escalate to MLAs/MPs.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="165"><div class="fci"><i data-lucide="layout-grid" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Discover Feed</h3><p class="fc-body">Explore issues in your neighbourhood through an infinite social scroll.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="220"><div class="fci"><i data-lucide="message-circle" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Community Power</h3><p class="fc-body">Upvote, comment and share to amplify important issues in your area.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="275"><div class="fci"><i data-lucide="award" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Citizen Reputation</h3><p class="fc-body">Earn badges and build contribution scores through quality reporting.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="330"><div class="fci"><i data-lucide="shield" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Dept Dashboards</h3><p class="fc-body">Government gets streamlined interfaces with role-based access and SLA monitoring.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="385"><div class="fci"><i data-lucide="bar-chart" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Analytics &amp; Insights</h3><p class="fc-body">Visualise issue trends, department performance and city health data.</p></div>
+      <div class="fc" data-aos="fade-up" data-aos-delay="440"><div class="fci"><i data-lucide="user-check" style="width:24px;height:24px;"></i></div><h3 class="fc-title">Representative Portals</h3><p class="fc-body">MLAs &amp; MPs get constituency-based filtering and accountability dashboards.</p></div>
+    </div>
+  </div>
+</section>
 
-        // Check for saved theme preference or default to 'dark'
-        let currentTheme = localStorage.getItem('theme') || 'dark';
-        html.setAttribute('data-theme', currentTheme);
-        
-        // Update toggle switches
-        function updateToggleSwitches(theme) {
-            const switches = [themeToggle, themeToggleMobile];
-            switches.forEach(toggle => {
-                if (!toggle) return;
-                
-                if (theme === 'light') {
-                    toggle.classList.add('active');
-                    const icon = toggle.querySelector('.theme-icon');
-                    if (icon) {
-                        icon.setAttribute('data-lucide', 'sun');
-                    }
-                } else {
-                    toggle.classList.remove('active');
-                    const icon = toggle.querySelector('.theme-icon');
-                    if (icon) {
-                        icon.setAttribute('data-lucide', 'moon');
-                    }
-                }
-            });
-            // Re-initialize icons after changing
-            setTimeout(() => {
-                lucide.createIcons();
-            }, 50);
-        }
+<!-- ══ PLATFORM SHOWCASE ══ -->
+<section id="platform" class="sec" style="overflow:hidden;">
+  <div class="con">
+    <!-- Citizens row -->
+    <div class="sc-row" style="margin-bottom:clamp(3.5rem,7vw,6rem);">
+      <div data-aos="fade-right">
+        <span class="label">For Citizens</span>
+        <h2 class="sc-title">Social Media Meets Civic Duty</h2>
+        <p class="sc-body">A familiar Instagram-like interface makes civic engagement effortless. Swipe, tap, report.</p>
+        <ul style="display:flex;flex-direction:column;gap:.8rem;">
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>Infinite scroll feed of local issues</li>
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>One-tap reporting with camera integration</li>
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>Upvote, comment, and share functionality</li>
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>Real-time push notifications on all updates</li>
+        </ul>
+      </div>
+      <div data-aos="fade-left" data-aos-delay="140">
+        <div class="sc-phones">
+          <div class="phone sps">
+            <img src="phone4.png" alt="Feed" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="border-radius:clamp(18px,3vw,30px);">
+            <div class="ph-fb" style="display:none;border-radius:clamp(18px,3vw,30px);width:clamp(80px,13vw,128px);"><i data-lucide="layout-grid" style="width:24px;height:24px;color:var(--c);opacity:.5;"></i><span>phone4.png</span></div>
+          </div>
+          <div class="phone spm">
+            <img src="phone5.png" alt="Report" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="border-radius:clamp(20px,3.5vw,34px);">
+            <div class="ph-fb" style="display:none;border-radius:clamp(20px,3.5vw,34px);width:clamp(105px,17vw,168px);border-color:var(--c);"><i data-lucide="camera" style="width:30px;height:30px;color:var(--c);opacity:.7;"></i><span style="color:var(--t2);">phone5.png</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        updateToggleSwitches(currentTheme);
+    <!-- Government row -->
+    <div class="sc-row">
+      <div data-aos="fade-right" style="order:2;" class="gov-img">
+        <div class="dash-img">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=72&auto=format&fit=crop" alt="Dashboard" loading="lazy">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,182,212,.12),rgba(139,92,246,.12));pointer-events:none;"></div>
+          <div style="position:absolute;top:.7rem;left:.7rem;background:rgba(6,6,15,.88);border:1px solid var(--bd);border-radius:8px;padding:.25rem .65rem;backdrop-filter:blur(8px);">
+            <span style="font-family:var(--font-mono);font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--g);">● Live Dashboard</span>
+          </div>
+        </div>
+      </div>
+      <div data-aos="fade-left" data-aos-delay="140" style="order:1;" class="gov-txt">
+        <span class="label">For Government</span>
+        <h2 class="sc-title">Streamlined Administration</h2>
+        <p class="sc-body">Powerful dashboards give departments full visibility, SLA tracking, and performance analytics.</p>
+        <ul style="display:flex;flex-direction:column;gap:.8rem;">
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>Auto issue routing by location &amp; category</li>
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>SLA monitoring with escalation warnings</li>
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>Performance analytics and reporting tools</li>
+          <li class="sc-li"><i data-lucide="check-circle" style="width:17px;height:17px;color:var(--g);flex-shrink:0;margin-top:2px;"></i>Photo verification for resolution proof</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        function toggleTheme() {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateToggleSwitches(newTheme);
-        }
+<!-- ══ HOW IT WORKS ══ -->
+<section class="sec bg2">
+  <div class="con">
+    <div style="text-align:center;margin-bottom:clamp(2rem,4vw,3rem);" data-aos="fade-up">
+      <span class="label" style="display:block;">Simple Process</span>
+      <h2 class="st">How TRIONCAM Works</h2>
+      <p class="ss" style="margin:0 auto;">From spotting a problem to seeing it resolved — six simple steps</p>
+    </div>
+    <div class="tl">
+      <div class="tli" data-aos="fade-up" data-aos-delay="0"><div class="tl-line"></div><div class="tl-dot"></div><div class="fci" style="width:42px;height:42px;border-radius:12px;margin-bottom:.7rem;"><i data-lucide="camera" style="width:19px;height:19px;"></i></div><h4 class="tl-title">Spot &amp; Report</h4><p class="tl-body">Open app, tap camera, capture the civic issue. Auto GPS included.</p></div>
+      <div class="tli" data-aos="fade-up" data-aos-delay="70"><div class="tl-line"></div><div class="tl-dot"></div><div class="fci" style="width:42px;height:42px;border-radius:12px;margin-bottom:.7rem;"><i data-lucide="send" style="width:19px;height:19px;"></i></div><h4 class="tl-title">Smart Routing</h4><p class="tl-body">AI categorises your issue and routes it to the correct department automatically.</p></div>
+      <div class="tli" data-aos="fade-up" data-aos-delay="140"><div class="tl-line"></div><div class="tl-dot"></div><div class="fci" style="width:42px;height:42px;border-radius:12px;margin-bottom:.7rem;"><i data-lucide="users" style="width:19px;height:19px;"></i></div><h4 class="tl-title">Community Validates</h4><p class="tl-body">Citizens upvote and comment, building community pressure for resolution.</p></div>
+      <div class="tli" data-aos="fade-up" data-aos-delay="210"><div class="tl-line"></div><div class="tl-dot"></div><div class="fci" style="width:42px;height:42px;border-radius:12px;margin-bottom:.7rem;"><i data-lucide="clock" style="width:19px;height:19px;"></i></div><h4 class="tl-title">SLA Countdown</h4><p class="tl-body">Departments receive issue with a deadline. No response triggers auto-escalation.</p></div>
+      <div class="tli" data-aos="fade-up" data-aos-delay="280"><div class="tl-line"></div><div class="tl-dot"></div><div class="fci" style="width:42px;height:42px;border-radius:12px;margin-bottom:.7rem;"><i data-lucide="activity" style="width:19px;height:19px;"></i></div><h4 class="tl-title">Live Updates</h4><p class="tl-body">Push notifications at every stage — assigned, in-progress, completed.</p></div>
+      <div class="tli" data-aos="fade-up" data-aos-delay="350"><div class="tl-line"></div><div class="tl-dot"></div><div class="fci" style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--g),#059669);margin-bottom:.7rem;"><i data-lucide="check-circle" style="width:19px;height:19px;"></i></div><h4 class="tl-title">Issue Resolved</h4><p class="tl-body">Dept uploads proof-of-resolution photo. Issue closed — city wins!</p></div>
+    </div>
+  </div>
+</section>
 
-        if (themeToggle) {
-            themeToggle.addEventListener('click', toggleTheme);
-        }
-        
-        if (themeToggleMobile) {
-            themeToggleMobile.addEventListener('click', toggleTheme);
-        }
+<!-- ══ CTA ══ -->
+<section class="sec">
+  <div class="con">
+    <div class="cta" data-aos="zoom-in">
+      <div style="position:relative;z-index:1;">
+        <h2 class="cta-title">The App is Here.<br>Download Now!</h2>
+        <p class="cta-sub">Join citizens making their cities better. Free to download, free to use — forever.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;">
+          <a href="trioncam.apk" download="TRIONCAM_v1.0.0.apk" style="display:inline-flex;align-items:center;gap:.5rem;background:#fff;color:#059669;padding:.8rem 1.85rem;border-radius:12px;font-family:var(--font-head);font-weight:800;font-size:.88rem;box-shadow:0 8px 22px rgba(0,0,0,.22);transition:all .3s;text-decoration:none;" onmouseover="this.style.transform='translateY(-3px) scale(1.03)'" onmouseout="this.style.transform=''"><i data-lucide="download" style="width:17px;height:17px;"></i>Download APK — Free</a>
+          <a href="#contact" style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.45);color:#fff;padding:.8rem 1.85rem;border-radius:12px;font-family:var(--font-head);font-weight:700;font-size:.88rem;transition:all .3s;text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,.24)'" onmouseout="this.style.background='rgba(255,255,255,.14)'">Partner With Us</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = document.getElementById('menu-icon');
+<!-- ══ TESTIMONIALS ══ -->
+<section class="sec bg2">
+  <div class="con">
+    <div style="text-align:center;margin-bottom:clamp(1.75rem,4vw,2.75rem);" data-aos="fade-up">
+      <span class="label" style="display:block;">Early Voices</span>
+      <h2 class="st">What Citizens Are Saying</h2>
+      <p class="ss" style="margin:0 auto;">From our beta testers and early access community</p>
+    </div>
+    <div class="tg">
+      <div class="tc" data-aos="fade-up" data-aos-delay="0">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;">
+          <img class="tav" src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?w=80&q=80&auto=format&fit=crop&crop=face" alt="Priya">
+          <div><p class="t-name">Priya S.</p><p class="t-location">Bengaluru, Karnataka</p></div>
+          <span style="margin-left:auto;color:#f59e0b;font-size:.78rem;">★★★★★</span>
+        </div>
+        <p class="t-body">"Finally an app that works! Reported a broken streetlight at 10pm and got a status update by morning. This is the future of civic engagement."</p>
+      </div>
+      <div class="tc" data-aos="fade-up" data-aos-delay="90">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;">
+          <img class="tav" src="https://images.unsplash.com/photo-1618641986557-1ecd230959aa?w=80&q=80&auto=format&fit=crop&crop=face" alt="Rahul" style="border-color:var(--c2);">
+          <div><p class="t-name">Rahul M.</p><p class="t-location">Mumbai, Maharashtra</p></div>
+          <span style="margin-left:auto;color:#f59e0b;font-size:.78rem;">★★★★★</span>
+        </div>
+        <p class="t-body">"The escalation feature is a game-changer! When BMC didn't respond, it automatically reached the ward councillor. Issue resolved in 3 days!"</p>
+      </div>
+      <div class="tc" data-aos="fade-up" data-aos-delay="180">
+        <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;">
+          <img class="tav" src="https://images.unsplash.com/photo-1569913486515-b74bf7751574?w=80&q=80&auto=format&fit=crop&crop=face" alt="Anjali" style="border-color:var(--c3);">
+          <div><p class="t-name">Anjali K.</p><p class="t-location">Chennai, Tamil Nadu</p></div>
+          <span style="margin-left:auto;color:#f59e0b;font-size:.78rem;">★★★★☆</span>
+        </div>
+        <p class="t-body">"I love the community feed — seeing 47 others upvote my pothole report gave me so much hope. Social civic engagement actually makes people care!"</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('show');
-                
-                // Toggle icon between menu and X
-                if (mobileMenu.classList.contains('show')) {
-                    menuIcon.setAttribute('data-lucide', 'x');
-                } else {
-                    menuIcon.setAttribute('data-lucide', 'menu');
-                }
-                lucide.createIcons();
-            });
+<!-- ══ ABOUT ══ -->
+<section id="contact" class="sec">
+  <div class="con">
+    <div class="ab-banner" data-aos="fade-up">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&q=72&auto=format&fit=crop" alt="Team" loading="lazy">
+      <div class="ab-ov"></div>
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(1rem,4vw,2.5rem);">
+        <p class="ab-eyebrow">The Team Behind TRIONCAM</p>
+        <h2 class="ab-title">ALGOORBIT INNOVATIONS</h2>
+        <p class="ab-subtitle">Building impactful technology for a better governed India</p>
+      </div>
+    </div>
+    <div class="ab-grid">
+      <div class="ab-card" data-aos="fade-up" data-aos-delay="0"><div class="ab-icon"><i data-lucide="zap" style="width:24px;height:24px;"></i></div><h3 class="ab-card-title">Innovation-Driven</h3><p class="ab-card-body">Cutting-edge technology creating meaningful civic solutions that actually work.</p></div>
+      <div class="ab-card" data-aos="fade-up" data-aos-delay="90"><div class="ab-icon"><i data-lucide="target" style="width:24px;height:24px;"></i></div><h3 class="ab-card-title">Purpose-Built</h3><p class="ab-card-body">Every product designed with clear social impact — not just business metrics.</p></div>
+      <div class="ab-card" data-aos="fade-up" data-aos-delay="180"><div class="ab-icon"><i data-lucide="rocket" style="width:24px;height:24px;"></i></div><h3 class="ab-card-title">Scale-Ready</h3><p class="ab-card-body">Enterprise-grade infrastructure built for nationwide deployment across all cities.</p></div>
+    </div>
+    <div style="text-align:center;margin-top:clamp(2rem,4vw,3rem);" data-aos="fade-up">
+      <a href="https://www.algoorbit.in" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-head);font-weight:700;color:var(--c);font-size:.92rem;transition:gap .25s;" onmouseover="this.style.gap='.85rem'" onmouseout="this.style.gap='.5rem'">Visit www.algoorbit.in <i data-lucide="external-link" style="width:15px;height:15px;"></i></a>
+    </div>
+  </div>
+</section>
 
-            // Close mobile menu when clicking on a link
-            const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.remove('show');
-                    menuIcon.setAttribute('data-lucide', 'menu');
-                    lucide.createIcons();
-                });
-            });
-        }
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="con">
+    <div class="fg">
+      <div>
+        <img src="logo.png"  alt="TRIONCAM" class="logo-dark" style="height:30px;margin-bottom:.75rem;">
+        <img src="logo2.png" alt="TRIONCAM" class="logo-light" style="height:30px;margin-bottom:.75rem;">
+        <p style="font-family:var(--font-body);font-size:.78rem;color:var(--t3);line-height:1.65;">Bridging citizens and governance through technology and transparency.</p>
+      </div>
+      <div>
+        <p class="fh">Platform</p>
+        <a class="fl" href="#download" style="color:var(--g);font-weight:700;">⬇ Download APK</a>
+        <a class="fl" href="#features">Features</a>
+        <a class="fl" href="#platform">How It Works</a>
+      </div>
+      <div>
+        <p class="fh">Company</p>
+        <a class="fl" href="https://www.algoorbit.in" target="_blank" rel="noopener">About ALGOORBIT</a>
+        <a class="fl" href="#contact">Contact Us</a>
+      </div>
+      <div>
+        <p class="fh">Legal</p>
+        <a class="fl" href="#">Privacy Policy</a>
+        <a class="fl" href="#">Terms of Service</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--bd);padding-top:1.1rem;text-align:center;">
+      <p class="footer-copy">© 2026 ALGOORBIT INNOVATIONS PRIVATE LIMITED. All rights reserved.</p>
+      <p class="footer-copy2">Building technology for better governance</p>
+    </div>
+  </div>
+</footer>
 
-        // Navbar scroll effect
-        const navbar = document.querySelector('nav');
-        let lastScroll = 0;
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+AOS.init({duration:850,once:false,offset:75,easing:'ease-out-cubic'});
+lucide.createIcons();
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 50) {
-                navbar.style.boxShadow = '0 10px 30px var(--shadow-color)';
-            } else {
-                navbar.style.boxShadow = '0 4px 6px var(--shadow-color)';
-            }
-            
-            lastScroll = currentScroll;
-        });
+// Theme
+let theme = localStorage.getItem('tc_theme') || 'dark';
+const html = document.documentElement;
+function applyTheme(t){
+  html.setAttribute('data-theme',t);
+  localStorage.setItem('tc_theme',t);
+  ['themeBtn','themeBtnMob'].forEach(id=>{
+    const b=document.getElementById(id); if(!b) return;
+    b.classList.toggle('light',t==='light');
+    const sv=b.querySelector('svg');
+    if(sv) sv.innerHTML = t==='light'
+      ? '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>'
+      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  });
+}
+applyTheme(theme);
+['themeBtn','themeBtnMob'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click',()=>applyTheme(theme===('dark')?(theme='light'):(theme='dark',theme)));
+});
 
-        // Countdown Timer
-        const launchDate = new Date('March 5, 2026 00:00:00').getTime();
+// Mobile menu
+const hambBtn=document.getElementById('hambBtn');
+const mobMenu=document.getElementById('mobMenu');
+const hambIcon=document.getElementById('hambIcon');
+function closeMenu(){
+  mobMenu.classList.remove('open');
+  hambIcon.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+}
+if(hambBtn) hambBtn.addEventListener('click',()=>{
+  const open=mobMenu.classList.toggle('open');
+  hambIcon.innerHTML=open
+    ?'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+    :'<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+});
 
-        const countdown = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = launchDate - now;
+// Nav positioning
+const navWrap=document.getElementById('navWrap');
+const banner=document.getElementById('launchBanner');
+function updateNav(){navWrap.style.top=Math.max(0,banner.offsetHeight-window.pageYOffset)+'px';}
+updateNav();
+window.addEventListener('scroll',updateNav,{passive:true});
+window.addEventListener('resize',updateNav,{passive:true});
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+// APK download
+function handleDl(btn){
+  const p=document.getElementById('dlProgress');
+  p.classList.add('active');
+  doConfetti(btn);
+  setTimeout(()=>p.classList.remove('active'),2600);
+}
+function doConfetti(anchor){
+  const cols=['#06b6d4','#8b5cf6','#f59e0b','#10b981','#ef4444','#ec4899'];
+  const r=anchor.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  for(let i=0;i<28;i++){
+    const el=document.createElement('div');
+    const tx=(Math.random()-.5)*360, ty=-100-Math.random()*220;
+    el.style.cssText=`position:fixed;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};left:${cx}px;top:${cy}px;pointer-events:none;z-index:9999;animation:cf 1.4s ease-out forwards;--tx:${tx}px;--ty:${ty}px;`;
+    document.body.appendChild(el); setTimeout(()=>el.remove(),1500);
+  }
+}
+const cs=document.createElement('style');
+cs.textContent='@keyframes cf{0%{transform:translate(-50%,-50%) scale(0) rotate(0deg);opacity:1}100%{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(1) rotate(720deg);opacity:0}}';
+document.head.appendChild(cs);
 
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',function(e){
+  const t=document.querySelector(this.getAttribute('href'));
+  if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}
+}));
 
-            if (distance < 0) {
-                clearInterval(countdown);
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
-            }
-        }, 1000);
+// Government section layout fix on desktop
+const govImg=document.querySelector('.gov-img');
+const govTxt=document.querySelector('.gov-txt');
+if(govImg&&govTxt){
+  const mq=window.matchMedia('(min-width:1024px)');
+  const fix=m=>{govImg.style.order=m.matches?'2':'1';govTxt.style.order=m.matches?'1':'2';};
+  fix(mq); mq.addEventListener('change',fix);
+}
 
-        // Generate particles for countdown section
-        const particlesContainer = document.getElementById('particlesContainer');
-        if (particlesContainer) {
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Scroll fade-in animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.scroll-fade-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Parallax effect on scroll
-        let ticking = false;
-        
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrolled = window.pageYOffset;
-                    
-                    // Parallax for orbs
-                    const orbs = document.querySelectorAll('.orb');
-                    orbs.forEach((orb, index) => {
-                        const speed = 0.3 + (index * 0.1);
-                        orb.style.transform = `translateY(${scrolled * speed}px)`;
-                    });
-                    
-                    ticking = false;
-                });
-                
-                ticking = true;
-            }
-        });
-
-        // Refresh icons after dynamic content loads
-        window.addEventListener('load', () => {
-            lucide.createIcons();
-        });
-
-        // Re-initialize icons on theme change
-        const themeObserver = new MutationObserver(() => {
-            lucide.createIcons();
-        });
-
-        themeObserver.observe(html, {
-            attributes: true,
-            attributeFilter: ['data-theme']
-        });
-    </script>
+new MutationObserver(()=>lucide.createIcons()).observe(html,{attributes:true,attributeFilter:['data-theme']});
+window.addEventListener('load',()=>lucide.createIcons());
+</script>
 </body>
 </html>
